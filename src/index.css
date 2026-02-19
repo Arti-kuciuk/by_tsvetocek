@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --font-joliet: "Joliet", serif;
+  --font-main: "SN Pro", sans-serif;
+}
+
+/* Подключаем Joliet (если он в public/fonts) */
+@font-face {
+  font-family: 'Joliet'; 
+  src: url('/fonts/Joliet-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Подключаем Bad Script (если он в public/fonts) */
+@font-face {
+  font-family: 'Bad Script';
+  src: url('/fonts/BadScript-Regular.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  body {
+    /* Цвет фона и текста */
+    @apply bg-[#E6DBD1] text-[#4A3F35];
+    
+    /* Основной шрифт сайта — SN Pro */
+    font-family: var(--font-main);
+    letter-spacing: 0.1rem;
+    
+    /* Сглаживание для Safari */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply w-full md:w-auto px-12 py-5
+           border-[#4A3F35] border-[1px] rounded-full 
+           text-[#2D2A26] text-lg tracking-wider
+           hover:bg-[#4A3F35] hover:text-[#E5DACE] 
+           transition-all duration-300 active:scale-95 
+           flex items-center justify-center;
+  }
+}
