@@ -9,12 +9,12 @@ export default function DailyBloom() {
           <div className="@container flex flex-col flex-1">
               <div className="flex justify-between items-start w-full">
                 {/* текст */}
-                <div className="flex flex-col items-start text-[#2D2A26] space-y-1 text-lg uppercase ">
+                <div className="flex flex-col items-start text-[#2D2A26]/80 space-y-1 text-lg uppercase ">
                   <p>Эстетика в каждом цветке</p>
                   <p>Свежесть внутри</p>
                   <p>Привычка</p>
                 </div>
-                <div className="flex flex-col items-end text-right text-[#2D2A26] text-lg uppercase pt-2 mr-6">
+                <div className="flex flex-col items-end text-right text-[#2D2A26]/80 text-lg uppercase pt-2 mr-6">
                   <p>С любовью к каждому</p> 
                   <p>лепестку</p> 
                 </div>
