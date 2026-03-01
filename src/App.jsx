@@ -16,8 +16,8 @@ export default function App() {
   };
 
   return (
-    <div className='min-h-screen, bg-[#E6DBD1]'>
-      <Navbar />
+    <div className='min-h-screen bg-[#E6DBD1]'>
+      <Navbar itemCount={cartCount} />
 
       <SubNavbar />
 
