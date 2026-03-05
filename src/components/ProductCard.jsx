@@ -23,7 +23,7 @@ export default function ProductCard({ image, title, price, onAdd }) {
 
         {/* Кнопка с ценой  */}
         <button
-          onClick={onAdd}
+          onClick={() => onAdd({ title, price, image })}
           className="mt-auto w-full btn-primary px-6 py-2 flex justify-center items-center"
         >
           {price} MDL

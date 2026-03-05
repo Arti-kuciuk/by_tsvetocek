@@ -1,7 +1,7 @@
 export default function Events() {
   return (
     <section className="px-0 md:px-16 py-0 md:py-12"> 
-      <div className="bg-[#E5DACE] md:rounded-[40px] md:border-[#4A3F35]/50 md:border-[1px] p-6 md:p-16 
+      <div className="bg-[#E5DACE] md:rounded-[40px] md:border-[#4A3F35]/50 md:border-[1px] p-6 md:p-12 
                       flex flex-col md:flex-row md:items-stretch gap-y-8 md:gap-x-20 relative overflow-hidden">
         
         {/* ФОТО: Слева на десктопе */}
@@ -9,7 +9,7 @@ export default function Events() {
           <img 
             src="/events.jpg" 
             alt="Мастер-класс по флористике" 
-            className="w-full h-full object-cover rounded-[30px] md:rounded-[40px] border-[#4A3F35]/20 border-[1px]"
+            className="w-full h-full object-cover rounded-[30px] md:rounded-[25px] border-[#4A3F35]/20 border-[1px]"
           />
         </div>
 

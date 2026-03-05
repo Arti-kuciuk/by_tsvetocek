@@ -1,33 +1,28 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useCart } from '../context/CartContext'; // Импортируем наш хук
 import MobileMenu from './Mobile_burger';
 
-// 1. Добавляем itemCount в пропсы
-export default function Navbar({ itemCount = 0 }) {
+export default function Navbar() {
+  const { totalItems } = useCart(); // Берем общее количество товаров из контекста
   const [isOpen, setIsOpen] = useState(false); 
   const [lang, setLang] = useState('RU');
-
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen]);
-
   const [isPop, setIsPop] = useState(false);
 
-  // Анимация на 300мс
+  // Блокировка скролла при открытом бургере
   useEffect(() => {
-    if (itemCount > 0) {
+    document.body.style.overflow = isOpen ? 'hidden' : 'unset';
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [isOpen]);
+
+  // Анимация пульсации при изменении кол-ва товаров
+  useEffect(() => {
+    if (totalItems > 0) {
       setIsPop(true);
       const timer = setTimeout(() => setIsPop(false), 300); 
       return () => clearTimeout(timer);
     }
-  }, [itemCount]);
+  }, [totalItems]);
 
   const toggleLang = () => {
     setLang(prev => prev === 'RU' ? 'RO' : prev === 'RO' ? 'EN' : 'RU');
@@ -37,7 +32,7 @@ export default function Navbar({ itemCount = 0 }) {
     <nav className="sticky top-0 z-50 w-full bg-[#DAC7B6] border-[#4A3F35]/50 border-b px-6 py-4 md:px-12">
       <div className="flex justify-between md:grid md:grid-cols-3 items-center">
 
-        {/* ... Бургер и Меню (без изменений) ... */}  
+        {/* Бургер (мобилка) */}
         <div className="flex md:hidden justify-start items-center">
           <button 
             onClick={() => setIsOpen(!isOpen)}
@@ -48,15 +43,17 @@ export default function Navbar({ itemCount = 0 }) {
           </button>
         </div>
         
+        {/* Ссылки (десктоп) */}
         <div className="hidden md:flex gap-x-6 text-xl font-sn text-[#4A3F35]">
-          <a href="#" className="hover:opacity-60 transition-opacity tracking-wider">Цветы</a>
-          <a href="#" className="hover:opacity-60 transition-opacity tracking-wider">Букеты</a>
+          <Link to="/" className="hover:opacity-60 transition-opacity tracking-wider">Цветы</Link>
+          <Link to="/" className="hover:opacity-60 transition-opacity tracking-wider">Букеты</Link>
         </div>
 
+        {/* Логотип */}
         <div className="flex justify-center">
-          <span className='text-4xl font-joliet' style={{ WebkitTextStroke: '0.5px #4A3F35' }}>
+          <Link to="/" className='text-4xl font-joliet select-none' style={{ WebkitTextStroke: '0.5px #4A3F35' }}>
             By Tsvetocek
-          </span>
+          </Link>
         </div>
 
         {/* Кнопки справа */}
@@ -69,36 +66,39 @@ export default function Navbar({ itemCount = 0 }) {
             <img src="/search.svg" alt="Поиск" className="h-6 w-6"/>
           </button>
 
-          {/* 2. Обновленная кнопка корзины */}
-          <button className="relative hidden md:block hover:opacity-60 transition-transform">
+          {/* Кнопка корзины с переходом на страницу /cart */}
+          <Link 
+            to="/cart" 
+            className="relative hidden md:block hover:opacity-60 transition-transform active:scale-95"
+          >
             <img src="/basket.svg" alt="Корзина" className="h-6 w-8" />
             
-            {/* 3. Условие для показа цифры */}
-            {itemCount > 0 && (
+            {totalItems > 0 && (
               <span className={`
                 absolute -top-2 -right-2
                 bg-[#4A3F35] text-[#E6DBD1] 
                 text-[10px] font-bold leading-none
                 flex items-center justify-center 
                 rounded-full border border-[#DAC7B6]
-                /* Динамика: минимальная ширина для 1 цифры, и расширение для 2+ */
                 min-w-[16px] h-4 px-1
                 transition-all duration-300 ease-out
                 ${isPop ? 'scale-125 shadow-lg shadow-[#4A3F35]/40' : 'scale-100'}
               `}>
                 <span className="translate-x-[0.5px]">
-                  {itemCount}
+                  {totalItems}
                 </span>
               </span>
             )}
-          </button>
+          </Link>
         </div>
       </div>
 
-      <MobileMenu isOpen={isOpen} 
-                  onClose={() => setIsOpen(false)} 
-                  currentLang={lang} 
-                  onLangChange={(newLang) => setLang(newLang)}/>
+      <MobileMenu 
+        isOpen={isOpen} 
+        onClose={() => setIsOpen(false)} 
+        currentLang={lang} 
+        onLangChange={(newLang) => setLang(newLang)}
+      />
     </nav>
   );
 }
