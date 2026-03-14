@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../context/CartContext'; // Импортируем наш хук
+import { useCart } from '../context/CartContext';
 import MobileMenu from './Mobile_burger';
 
 export default function Navbar() {
@@ -45,13 +45,18 @@ export default function Navbar() {
         
         {/* Ссылки (десктоп) */}
         <div className="hidden md:flex gap-x-6 text-xl font-sn text-[#4A3F35]">
-          <Link to="/" className="hover:opacity-60 transition-opacity tracking-wider">Цветы</Link>
-          <Link to="/" className="hover:opacity-60 transition-opacity tracking-wider">Букеты</Link>
+          <Link to="/category/flowers" className="hover:opacity-60 transition-opacity tracking-wider">Цветы</Link>
+          <Link to="/category/bouquets" className="hover:opacity-60 transition-opacity tracking-wider">Букеты</Link>
         </div>
 
         {/* Логотип */}
         <div className="flex justify-center">
-          <Link to="/" className='text-4xl font-joliet select-none' style={{ WebkitTextStroke: '0.5px #4A3F35' }}>
+          <Link 
+            to="/" 
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="text-4xl font-joliet select-none transition-opacity hover:opacity-70" 
+            style={{ WebkitTextStroke: '0.5px #4A3F35' }}
+          >
             By Tsvetocek
           </Link>
         </div>

@@ -5,11 +5,11 @@ export default function ProductCard({ image, title, price, onAdd }) {
     <div className="bg-[#E5DACE] rounded-[30px] border-[#4A3F35]/50 border-[1px] overflow-hidden flex flex-col w-full font-jolit text-[#4A3F35] md:max-w-[350px] h-full">
       
       {/* Контейнер для фото с закруглением */}
-      <div>
+      <div className="w-full aspect-square overflow-hidden rounded-t-xl bg-gray-50">
         <img 
           src={image} 
           alt={title} 
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
         />
       </div>
 

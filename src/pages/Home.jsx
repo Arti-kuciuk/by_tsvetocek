@@ -1,19 +1,15 @@
-import Navbar from '../components/Navbar'
 import DailyBloom from '../components/DailyBloom'
-import SubNavbar from '../components/SubNavbar'
 import ProductCard from '../components/ProductCard'
 import Events from '../components/Events'
 import FloatingCart from '../components/FloatingCart'
 import { useCart } from '../context/CartContext'
+import products from '../data/products.json'
 
 export default function Home() {
   const { addToCart } = useCart();
 
   return (
     <div className='min-h-screen bg-[#E6DBD1]'>
-      <Navbar />
-
-      <SubNavbar />
 
       <DailyBloom />
 
@@ -22,27 +18,19 @@ export default function Home() {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 md:gap-8 gap-8 md:px-16 px-6 py-8">
+        {products.map((product) => (
         <ProductCard 
-          image="flowers/roses.jpg" 
-          title="букет белых роз" 
-          price={500} 
-          onAdd={() => addToCart({ 
-            title: "букет белых роз", 
-            price: 500, 
-            image: "flowers/roses.jpg" 
-          })}
+          key={product.id}
+          image={product.image}
+          title={product.title_ru} 
+          price={product.price}
+          onAdd={() => addToCart({
+            title: product.title_ru,
+            price: product.price,
+            image: product.image
+            })}
         />
-
-        <ProductCard 
-          image="flowers/tulips.jpg" 
-          title="красные тюльпаны" 
-          price={350} 
-          onAdd={() => addToCart({ 
-            title: "красные тюльпаны", 
-            price: 350, 
-            image: "flowers/tulips.jpg" 
-          })}
-        />
+        ))}
         
       </div>
 

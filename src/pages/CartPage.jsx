@@ -67,9 +67,22 @@ ${cartItems.map(item => `• ${item.title} x${item.quantity} — ${item.price * 
         
         {/* Левая часть: Список товаров */}
         <div className="flex-1">
-          <Link to="/" className="text-[#4A3F35] text-sm tracking-[0.2em] mb-12 inline-block">
-            ← Назад к покупкам
-          </Link>
+          <div className="flex justify-between items-center mb-12">
+            <Link to="/" className="text-[#4A3F35] text-sm tracking-[0.2em]">
+              ← Назад к покупкам
+            </Link>
+            
+            {cartItems.length > 0 && (
+              <button 
+                onClick={() => {
+                  if(window.confirm("Очистить корзину?")) clearCart();
+                }}
+                className="text-[#4A3F35]/40 text-[10px] uppercase tracking-[0.2em] hover:text-red-800 transition-colors border-b border-transparent hover:border-red-800/20 pb-0.5"
+              >
+                Очистить всё
+              </button>
+            )}
+          </div>
 
           <div className="space-y-8 mt-4">
             {cartItems.length === 0 ? (

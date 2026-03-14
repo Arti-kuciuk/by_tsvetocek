@@ -1,0 +1,35 @@
+[
+    {
+      "id": "1",
+      "category": "flowers",
+      "title_ru": "Букет белых роз",
+      "title_ro": "Buchet de trandafiri albi",
+      "price": 500,
+      "image": "/flowers/roses.jpg",
+      "description_ru": "Классический букет из белоснежных роз.",
+      "description_ro": "Buchet clasic de trandafiri albi ca zăpada.",
+      "popular": true
+    },
+    {
+      "id": "2",
+      "category": "flowers",
+      "title_ru": "Красные тюльпаны",
+      "title_ro": "Lalele roșii",
+      "price": 350,
+      "image": "/flowers/tulips.jpg",
+      "description_ru": "Яркие весенние тюльпаны.",
+      "description_ro": "Lalele strălucitoare de primăvară.",
+      "popular": true
+    },
+    {
+      "id": "3",
+      "category": "bouquets",
+      "title_ru": "Авторский букет",
+      "title_ro": "Buchet autor",
+      "price": 350,
+      "image": "/bouquets/mix1.jpg",
+      "description_ru": "Авторский букет из различных цветов.",
+      "description_ro": "Buchet autor cu diferite flori.",
+      "popular": true
+    }
+  ]
