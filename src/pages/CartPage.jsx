@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext'; 
+// 1. ИМПОРТИРУЕМ SUPABASE
+import { supabase } from '../backend/supabaseClient';
 
 export default function CartPage() {
   const { cartItems, updateQuantity, clearCart } = useCart();
-  const [formData, setFormData] = React.useState({
+  const [formData, setFormData] = useState({
     name: '',
     phone: '',
     address: '',
     comment: ''
   });
+  
+  // Добавим состояние загрузки, чтобы кнопка не нажималась дважды
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!cartItems) return null;
 
@@ -21,15 +26,57 @@ export default function CartPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const botToken = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
-    const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID;
-
+    
     if (!formData.name || !formData.phone || !formData.address) {
       alert("Пожалуйста, заполните Имя, Телефон и Адрес.");
       return;
     }
 
-    const message = `
+    setIsSubmitting(true); // Блокируем кнопку на время отправки
+
+    try {
+      // ==========================================
+      // ШАГ 1: СОХРАНЯЕМ ЗАКАЗ В SUPABASE
+      // ==========================================
+      const { error: orderError } = await supabase
+        .from('orders')
+        .insert([
+          { 
+            customer_name: formData.name,
+            customer_phone: formData.phone,
+            address: formData.address,
+            comment: formData.comment,
+            total_price: totalPrice,
+            items: cartItems, // Закидываем всю корзину одним JSON-массивом!
+            status: 'new'
+          }
+        ]);
+
+      if (orderError) throw orderError; // Если ошибка - прерываем процесс
+
+      // ==========================================
+      // ШАГ 2: ОБНОВЛЯЕМ ОСТАТКИ НА СКЛАДЕ
+      // ==========================================
+      // Проходимся по каждому товару в корзине
+      for (const item of cartItems) {
+        // Высчитываем новый остаток (защита от минуса)
+        const newStock = Math.max(0, item.stock - item.quantity); 
+        
+        const { error: stockError } = await supabase
+          .from('products')
+          .update({ stock_count: newStock })
+          .eq('id', item.id); // Обновляем конкретный цветок по его ID
+
+        if (stockError) console.error('Ошибка обновления склада:', stockError);
+      }
+
+      // ==========================================
+      // ШАГ 3: ОТПРАВЛЯЕМ В TELEGRAM
+      // ==========================================
+      const botToken = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+      const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+
+      const message = `
 🌸 **НОВЫЙ ЗАКАЗ** 🌸
 ━━━━━━━━━━━━━━━━━━
 👤 **Клиент:** ${formData.name.toUpperCase()}
@@ -41,31 +88,34 @@ export default function CartPage() {
 ${cartItems.map(item => `• ${item.title} x${item.quantity} — ${item.price * item.quantity} MDL`).join('\n')}
 ━━━━━━━━━━━━━━━━━━
 💰 **ИТОГО: ${totalPrice} MDL**
-    `;
+      `;
 
-    try {
-      const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'Markdown' })
       });
 
-      if (response.ok) {
-        alert("Заказ отправлен!");
-        clearCart();
-        window.location.href = "/";
-      }
+      // ==========================================
+      // ШАГ 4: ЗАВЕРШЕНИЕ
+      // ==========================================
+      alert("Заказ успешно оформлен!");
+      clearCart();
+      window.location.href = "/";
+
     } catch (err) {
-      alert("Ошибка отправки.");
+      console.error("Критическая ошибка:", err);
+      alert("Произошла ошибка при оформлении заказа. Пожалуйста, свяжитесь с нами напрямую.");
+    } finally {
+      setIsSubmitting(false); // Разблокируем кнопку
     }
   };
 
   return (
     <div className="min-h-screen bg-[#E6DBD1] p-6 md:px-16 md:py-12">
-      {/* 1. Контейнер теперь flex-row с самого верха, чтобы форма была на уровне кнопки */}
       <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
         
-        {/* Левая часть: Список товаров */}
+        {/* Левая часть: Список товаров (БЕЗ ИЗМЕНЕНИЙ) */}
         <div className="flex-1">
           <div className="flex justify-between items-center mb-12">
             <Link to="/" className="text-[#4A3F35] text-sm tracking-[0.2em]">
@@ -115,7 +165,7 @@ ${cartItems.map(item => `• ${item.title} x${item.quantity} — ${item.price * 
           </div>
         </div>
 
-        {/* 2. ПРАВАЯ ЧАСТЬ: ФОРМА (Показывается только если товары есть) */}
+        {/* ПРАВАЯ ЧАСТЬ: ФОРМА */}
         {cartItems.length > 0 && (
           <div className="w-full lg:w-[450px] bg-[#DAC7B6]/30 p-8 md:p-10 rounded-[40px] h-fit lg:sticky lg:top-12 shadow-sm border border-[#4A3F35]/5">
             <h2 className="text-2xl font-main text-[#4A3F35] uppercase tracking-widest mb-6">
@@ -175,9 +225,10 @@ ${cartItems.map(item => `• ${item.title} x${item.quantity} — ${item.price * 
 
               <button 
                 type="submit"
-                className="w-full bg-[#4A3F35] text-[#E6DBD1] py-4 rounded-full mt-4 uppercase tracking-[0.2em] text-[10px] font-bold hover:opacity-90 transition-all active:scale-[0.98] shadow-md"
+                disabled={isSubmitting} // Отключаем кнопку пока идет отправка
+                className={`w-full bg-[#4A3F35] text-[#E6DBD1] py-4 rounded-full mt-4 uppercase tracking-[0.2em] text-[10px] font-bold transition-all shadow-md ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90 active:scale-[0.98]'}`}
               >
-                Подтвердить заказ
+                {isSubmitting ? 'Обработка...' : 'Подтвердить заказ'}
               </button>
             </form>
           </div>

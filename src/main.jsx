@@ -7,6 +7,8 @@ import { CartProvider } from './context/CartContext'
 import Home from './pages/Home'
 import CartPage from './pages/CartPage'
 import CategoryPage from './pages/CategoryPage'
+import AdminPage from './pages/AdminPage'
+import ProductPage from './pages/ProductPage'
 
 // Компоненты
 import ScrollToTop from './components/ScrollToTop'
@@ -36,6 +38,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
               <Route path="/" element={<Home />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/category/:categoryName" element={<CategoryPage />} />
+              <Route path="/product/:id" element={<ProductPage />} />
+              <Route path="/admin-tsv" element={<AdminPage />} />
             </Routes>
           </main>
           

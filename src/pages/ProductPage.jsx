@@ -1,0 +1,151 @@
+import React, { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { supabase } from '../backend/supabaseClient';
+import { useCart } from '../context/CartContext';
+
+export default function ProductPage() {
+  const { id } = useParams();
+  const { addToCart } = useCart();
+  
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [quantity, setQuantity] = useState(1);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', id)
+        .single(); 
+
+      if (error) {
+        console.error('Ошибка загрузки товара:', error);
+      } else {
+        setProduct(data);
+      }
+      setLoading(false);
+    };
+
+    fetchProduct();
+  }, [id]);
+
+  const handleAddToCart = () => {
+    if (product.stock_count !== null && product.stock_count <= 0) {
+      alert("К сожалению, этого товара нет в наличии.");
+      return;
+    }
+
+    addToCart({
+      id: product.id,
+      title: product.title_ru,
+      price: product.price,
+      image: (product.images && product.images.length > 0) ? product.images[0] : product.image_url,
+      stock: product.stock_count,
+      quantity: quantity
+    });
+  };
+
+  if (loading) return <div className="min-h-screen bg-[#E6DBD1] p-16 font-main text-2xl text-[#4A3F35] text-center">Загрузка...</div>;
+  if (!product) return <div className="min-h-screen bg-[#E6DBD1] p-16 font-main text-2xl text-[#4A3F35] text-center">Товар не найден.</div>;
+
+  return (
+    <div className="min-h-screen bg-[#E6DBD1] text-[#4A3F35] pb-20">
+      
+      {/* Кнопка Назад */}
+      <div className="md:px-16 px-6 pt-8 md:pt-10 mb-6 md:mb-0">
+        <Link to="/" className="text-[#4A3F35]/70 text-[10px] md:text-sm uppercase tracking-[0.2em] hover:text-[#4A3F35] transition-colors flex items-center gap-2 w-fit border-b border-transparent hover:border-[#4A3F35]/30 pb-1">
+          ← Назад в каталог
+        </Link>
+      </div>
+
+      {/* ГЛАВНЫЙ КОНТЕЙНЕР: items-stretch заставляет колонки быть одной высоты */}
+      <div className="md:px-16 px-6 py-6 md:py-12 flex flex-col md:flex-row items-stretch gap-10 lg:gap-16">
+        
+        {/* ЛЕВАЯ ЧАСТЬ: ГАЛЕРЕЯ */}
+        <div className="md:w-1/3 lg:w-[30%] w-full">
+          {product.images && product.images.length > 0 ? (
+            product.images.map((imgUrl, index) => (
+              <div key={index} className="rounded-[30px] md:rounded-[40px] overflow-hidden border border-[#4A3F35]/5 shadow-sm relative h-full">
+                <img 
+                  src={imgUrl} 
+                  alt={`${product.title_ru} - ${index + 1}`} 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ))
+          ) : (
+            <div className="rounded-[30px] md:rounded-[40px] overflow-hidden border border-[#4A3F35]/5 shadow-sm h-full">
+              <img src={product.image_url} alt={product.title_ru} className="w-full h-full object-cover aspect-[3/4] md:aspect-auto" />
+            </div>
+          )}
+        </div>
+
+        {/* ПРАВАЯ ЧАСТЬ: ИНФО (flex-col чтобы элементы шли сверху вниз) */}
+        <div className="md:w-2/3 lg:w-[70%] w-full flex flex-col">
+          
+          {/* ВЕРХНИЙ БЛОК: Заголовок, цена и описание */}
+          <div className="space-y-6 md:space-y-8">
+            
+            {/* Заголовок */}
+            <h1 className="text-3xl md:text-4xl lg:text-[44px] font-main uppercase leading-tight tracking-wide text-[#2D2A26]">
+              {product.title_ru}
+            </h1>
+
+            {/* Цена и Наличие */}
+            <div className="flex flex-wrap items-center gap-4 border-t border-[#4A3F35]/20 pt-6">
+              <p className="text-2xl md:text-3xl lg:text-4xl font-main text-[#2D2A26]">{product.price} MDL</p>
+              {product.stock_count !== null && (
+                <p className={`text-[10px] md:text-[11px] uppercase tracking-[0.15em] px-3 py-1 rounded-full font-bold ${product.stock_count > 0 ? 'bg-[#73826A]/20 text-[#43523A]' : 'bg-red-800/10 text-red-800'}`}>
+                  {product.stock_count > 0 ? `В наличии: ${product.stock_count}` : 'Нет в наличии'}
+                </p>
+              )}
+            </div>
+
+            {/* Описание товара */}
+            <div className="text-sm md:text-base lg:text-lg text-[#2D2A26]/80 leading-relaxed whitespace-pre-line pb-8">
+              {product.description_ru || 'Авторский букет из различных цветов.'}
+            </div>
+            
+          </div>
+
+          {/* НИЖНИЙ БЛОК: УПРАВЛЕНИЕ (mt-auto прижимает этот блок к низу колонки) */}
+          <div className="mt-auto pt-6 border-t border-[#4A3F35]/20 flex flex-col md:flex-row items-stretch gap-4 md:gap-6">
+            
+            {/* Селектор количества */}
+            <div className="w-full md:w-1/3 flex items-center justify-between border border-[#4A3F35] rounded-full bg-transparent px-5 py-3 md:py-0">
+              <span className="text-[10px] md:text-xs text-[#2D2A26]/70 uppercase tracking-[0.2em] font-medium">Количество</span>
+              <div className="flex items-center gap-4">
+                <button 
+                  onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                  className="text-xl md:text-2xl text-[#2D2A26]/70 hover:text-[#2D2A26] transition-colors pb-1"
+                >−</button>
+                <span className="text-base md:text-lg font-main text-[#2D2A26] w-4 text-center">{quantity}</span>
+                <button 
+                  onClick={() => setQuantity(q => q + 1)}
+                  className="text-xl md:text-2xl text-[#2D2A26]/70 hover:text-[#2D2A26] transition-colors pb-1"
+                >+</button>
+              </div>
+            </div>
+
+            {product.stock_count !== null && product.stock_count <= 0 ? (
+              <button disabled className="btn-primary opacity-50 cursor-not-allowed flex-1 border-[#4A3F35]/50 text-[#4A3F35]/50 hover:bg-transparent hover:text-[#4A3F35]/50">
+                Нет в наличии
+              </button>
+            ) : (
+              <button 
+                onClick={handleAddToCart}
+                className="btn-primary flex-1 !m-0"
+              >
+                Добавить в корзину
+              </button>
+            )}
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  );
+}

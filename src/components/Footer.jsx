@@ -49,9 +49,8 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-2xl font-main tracking-wide">Соцсети</h3>
             <div className="flex flex-col space-y-1 text-xs md:text-base opacity-80">
-              <a href="#" className="hover:opacity-100 transition-opacity">Instagram</a>
+              <a href="https://www.instagram.com/by.tsvetocek/" className="hover:opacity-100 transition-opacity">Instagram</a>
               <a href="#" className="hover:opacity-100 transition-opacity">Facebook</a>
-              <a href="#" className="hover:underline transition-opacity">WhatsApp</a>
             </div>
           </div>
 

@@ -1,32 +1,46 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // 1. Импортируем Link для навигации
 
-export default function ProductCard({ image, title, price, onAdd }) {
+// 2. Добавляем id в пропсы
+export default function ProductCard({ id, image, title, price, stock, onAdd }) {
+  
+  const isOutOfStock = stock <= 0;
+
   return (
-    <div className="bg-[#E5DACE] rounded-[30px] border-[#4A3F35]/50 border-[1px] overflow-hidden flex flex-col w-full font-jolit text-[#4A3F35] md:max-w-[350px] h-full">
+    <div className={`bg-[#E5DACE] rounded-[30px] border-[#4A3F35]/50 border-[1px] overflow-hidden flex flex-col w-full font-jolit text-[#4A3F35] md:max-w-[350px] h-full transition-opacity duration-300 ${isOutOfStock ? 'opacity-70' : ''}`}>
       
-      {/* Контейнер для фото с закруглением */}
-      <div className="w-full aspect-square overflow-hidden rounded-t-xl bg-gray-50">
+      {/* 3. Оборачиваем фото в Link */}
+      <Link to={`/product/${id}`} className="w-full aspect-square overflow-hidden rounded-t-xl bg-gray-50 relative block">
         <img 
           src={image} 
           alt={title} 
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+          className={`w-full h-full object-cover transition-all duration-500 ${isOutOfStock ? 'grayscale-[40%]' : 'hover:scale-105'}`}
         />
-      </div>
+      </Link>
 
       <hr className="border-[#4A3F35]/50"/>
 
       {/* Инфо-блок */}
       <div className="px-6 pb-6 pt-4 flex flex-col items-center flex-1">
-        <h3 className="text-[#4A3F35] text-xl mb-3 md:mb-6 text-center">
-          {title}
-        </h3>
+        
+        {/* 4. Оборачиваем заголовок в Link, чтобы он тоже был кликабельным */}
+        <Link to={`/product/${id}`} className="hover:opacity-70 transition-opacity">
+          <h3 className="text-[#4A3F35] text-xl mb-3 md:mb-6 text-center">
+            {title}
+          </h3>
+        </Link>
 
-        {/* Кнопка с ценой  */}
+        {/* Кнопка остается как была, она не перекидывает на страницу, а просто добавляет в корзину */}
         <button
-          onClick={() => onAdd({ title, price, image })}
-          className="mt-auto w-full btn-primary px-6 py-2 flex justify-center items-center"
+          onClick={onAdd}
+          disabled={isOutOfStock}
+          className={`mt-auto w-full px-6 py-2 flex justify-center items-center rounded-full transition-colors duration-300 ${
+            isOutOfStock 
+              ? 'bg-gray-400/50 text-[#4A3F35] cursor-not-allowed border-transparent' 
+              : 'btn-primary' 
+          }`}
         >
-          {price} MDL
+          {isOutOfStock ? 'Нет на складе' : `${price} MDL`}
         </button>
       </div>
 

@@ -1,15 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import products from '../data/products.json';
 import ProductCard from '../components/ProductCard';
 import { useCart } from '../context/CartContext';
+import { supabase } from '../backend/supabaseClient'; // Проверь правильность пути к файлу
 
 export default function CategoryPage() {
   const { categoryName } = useParams(); // Получаем 'flowers' или 'bouquets' из URL
   const { addToCart } = useCart();
+  
+  // 1. Создаем состояния для товаров и индикатора загрузки
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Фильтруем товары по категории
-  const filteredProducts = products.filter(item => item.category === categoryName);
+  // 2. Делаем запрос в базу при загрузке страницы или смене категории
+  useEffect(() => {
+    const fetchProductsByCategory = async () => {
+      setLoading(true); // Включаем индикатор загрузки
+      
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        // 3. Магия Supabase: фильтруем товары прямо в базе данных!
+        .eq('category', categoryName); 
+
+      if (error) {
+        console.error('Ошибка загрузки категории:', error);
+      } else {
+        setProducts(data); // Сохраняем полученные товары
+      }
+      
+      setLoading(false); // Выключаем индикатор загрузки
+    };
+
+    fetchProductsByCategory();
+  }, [categoryName]); // 4. ВАЖНО: React перезапустит запрос, если categoryName в URL изменится
 
   // Заголовок страницы в зависимости от категории
   const titles = {
@@ -24,24 +48,36 @@ export default function CategoryPage() {
         {titles[categoryName] || "Каталог"}
       </h1>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-        {filteredProducts.map(product => (
-          <ProductCard 
-            key={product.id}
-            image={product.image}
-            title={product.title_ru}
-            price={product.price}
-            onAdd={() => addToCart({
-              title: product.title_ru,
-              price: product.price,
-              image: product.image
-            })}
-          />
-        ))}
-      </div>
-      
-      {filteredProducts.length === 0 && (
-        <p className="text-center opacity-50">В этой категории пока нет товаров.</p>
+      {/* 5. Если грузится — показываем текст, если загрузилось — показываем сетку */}
+      {loading ? (
+        <p className="text-center opacity-50 text-xl font-main">Загрузка товаров...</p>
+      ) : (
+        <>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            {products.map(product => (
+              <ProductCard 
+                key={product.id}
+                // 6. Не забываем про новые названия колонок и ID со складом
+                image={product.image_url}
+                title={product.title_ru}
+                price={product.price}
+                stock={product.stock_count}
+                
+                onAdd={() => addToCart({
+                  id: product.id,
+                  title: product.title_ru,
+                  price: product.price,
+                  image: product.image_url,
+                  stock: product.stock_count
+                })}
+              />
+            ))}
+          </div>
+          
+          {products.length === 0 && (
+            <p className="text-center opacity-50 mt-8">В этой категории пока нет товаров.</p>
+          )}
+        </>
       )}
     </div>
   );
