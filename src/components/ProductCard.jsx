@@ -1,15 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // 1. Импортируем Link для навигации
+import { Link } from 'react-router-dom';
 
-// 2. Добавляем id в пропсы
 export default function ProductCard({ id, image, title, price, stock, onAdd }) {
-  
   const isOutOfStock = stock <= 0;
 
   return (
     <div className={`bg-[#E5DACE] rounded-[30px] border-[#4A3F35]/50 border-[1px] overflow-hidden flex flex-col w-full font-jolit text-[#4A3F35] md:max-w-[350px] h-full transition-opacity duration-300 ${isOutOfStock ? 'opacity-70' : ''}`}>
       
-      {/* 3. Оборачиваем фото в Link */}
       <Link to={`/product/${id}`} className="w-full aspect-square overflow-hidden rounded-t-xl bg-gray-50 relative block">
         <img 
           src={image} 
@@ -20,17 +17,13 @@ export default function ProductCard({ id, image, title, price, stock, onAdd }) {
 
       <hr className="border-[#4A3F35]/50"/>
 
-      {/* Инфо-блок */}
       <div className="px-6 pb-6 pt-4 flex flex-col items-center flex-1">
-        
-        {/* 4. Оборачиваем заголовок в Link, чтобы он тоже был кликабельным */}
         <Link to={`/product/${id}`} className="hover:opacity-70 transition-opacity">
           <h3 className="text-[#4A3F35] text-xl mb-3 md:mb-6 text-center">
             {title}
           </h3>
         </Link>
 
-        {/* Кнопка остается как была, она не перекидывает на страницу, а просто добавляет в корзину */}
         <button
           onClick={onAdd}
           disabled={isOutOfStock}
@@ -43,7 +36,6 @@ export default function ProductCard({ id, image, title, price, stock, onAdd }) {
           {isOutOfStock ? 'Нет на складе' : `${price} MDL`}
         </button>
       </div>
-
     </div>
   );
 }

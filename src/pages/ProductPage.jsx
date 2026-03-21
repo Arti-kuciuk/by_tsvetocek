@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../backend/supabaseClient';
 import { useCart } from '../context/CartContext';
+import SEO from '../components/SEO';
 
 export default function ProductPage() {
   const { id } = useParams();
@@ -52,6 +53,10 @@ export default function ProductPage() {
 
   return (
     <div className="min-h-screen bg-[#E6DBD1] text-[#4A3F35] pb-20">
+      <SEO 
+        title={product.title_ru} 
+        description={product.description_ru} 
+      />  
       
       {/* Кнопка Назад */}
       <div className="md:px-16 px-6 pt-8 md:pt-10 mb-6 md:mb-0">

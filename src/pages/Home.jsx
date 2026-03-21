@@ -3,6 +3,7 @@ import DailyBloom from '../components/DailyBloom';
 import ProductCard from '../components/ProductCard';
 import Events from '../components/Events';
 import FloatingCart from '../components/FloatingCart';
+import Gifts from '../components/Gifts';
 import { useCart } from '../context/CartContext';
 import { supabase } from '../backend/supabaseClient';
 
@@ -43,7 +44,7 @@ export default function Home() {
         {dbProducts.map((product) => (
           <ProductCard 
             key={product.id}
-            id={product.id} // Передаем ID для ссылки на страницу товара
+            id={product.id} 
             image={product.image_url} 
             title={product.title_ru} 
             price={product.price}
@@ -66,9 +67,17 @@ export default function Home() {
 
       <Events />
 
+
+      {/* ПОДАРКИ */}
+      <div className='flex items-start px-6 md:px-16 pt-4'>
+        <h1 className='text-[#4A3F35] text-4xl md:text-5xl tracking-wider'>Подарки</h1>
+      </div>
+
+      <Gifts />
+
       {/* ПЛАВАЮЩАЯ КОРЗИНА */}
       <FloatingCart />
-      
+
     </div>
   );
 }

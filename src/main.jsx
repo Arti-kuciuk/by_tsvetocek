@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { CartProvider } from './context/CartContext' 
+import { CartProvider } from './context/CartContext'
+import { HelmetProvider } from 'react-helmet-async'; 
 
 // Страницы
 import Home from './pages/Home'
@@ -9,6 +10,7 @@ import CartPage from './pages/CartPage'
 import CategoryPage from './pages/CategoryPage'
 import AdminPage from './pages/AdminPage'
 import ProductPage from './pages/ProductPage'
+import EventsPage from './pages/EventsPage'
 
 // Компоненты
 import ScrollToTop from './components/ScrollToTop'
@@ -21,6 +23,7 @@ import './index.css'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <CartProvider>
+      <HelmetProvider>
       <BrowserRouter>
         <ScrollToTop />
         
@@ -40,6 +43,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
               <Route path="/category/:categoryName" element={<CategoryPage />} />
               <Route path="/product/:id" element={<ProductPage />} />
               <Route path="/admin-tsv" element={<AdminPage />} />
+              <Route path="/events" element={<EventsPage />} />
             </Routes>
           </main>
           
@@ -47,6 +51,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         </div>
         
       </BrowserRouter>
+      </HelmetProvider>
     </CartProvider>
   </React.StrictMode>,
 )

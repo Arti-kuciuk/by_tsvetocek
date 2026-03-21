@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext'; 
-// 1. ИМПОРТИРУЕМ SUPABASE
 import { supabase } from '../backend/supabaseClient';
 
 export default function CartPage() {
@@ -13,7 +12,6 @@ export default function CartPage() {
     comment: ''
   });
   
-  // Добавим состояние загрузки, чтобы кнопка не нажималась дважды
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!cartItems) return null;
@@ -32,7 +30,7 @@ export default function CartPage() {
       return;
     }
 
-    setIsSubmitting(true); // Блокируем кнопку на время отправки
+    setIsSubmitting(true); 
 
     try {
       // ==========================================

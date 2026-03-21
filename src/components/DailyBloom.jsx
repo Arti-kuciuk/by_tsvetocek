@@ -71,7 +71,7 @@ export default function DailyBloom() {
           </h2>
 
           <div className="bg-[#E5DACE] border-[#4A3F35]/50 border-[1px] rounded-[30px] p-6 mb-2 flex flex-col">
-              <div className="w-full aspect-[3/4] border-[#4A3F35]/40 border-[1px] rounded-[20px] overflow-hidden">
+              <div className="w-full aspect-[9/16] border-[#4A3F35]/40 border-[1px] rounded-[20px] overflow-hidden">
                 <img 
                     src={imageUrl} 
                     alt="Daily Bloom Mobile" 

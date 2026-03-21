@@ -2,53 +2,54 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import { useCart } from '../context/CartContext';
-import { supabase } from '../backend/supabaseClient'; // Проверь правильность пути к файлу
-
+import { supabase } from '../backend/supabaseClient'; 
+import SEO from '../components/SEO';
 export default function CategoryPage() {
-  const { categoryName } = useParams(); // Получаем 'flowers' или 'bouquets' из URL
+  const { categoryName } = useParams(); 
   const { addToCart } = useCart();
   
-  // 1. Создаем состояния для товаров и индикатора загрузки
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 2. Делаем запрос в базу при загрузке страницы или смене категории
   useEffect(() => {
     const fetchProductsByCategory = async () => {
-      setLoading(true); // Включаем индикатор загрузки
+      setLoading(true); 
       
       const { data, error } = await supabase
         .from('products')
         .select('*')
-        // 3. Магия Supabase: фильтруем товары прямо в базе данных!
         .eq('category', categoryName); 
 
       if (error) {
         console.error('Ошибка загрузки категории:', error);
       } else {
-        setProducts(data); // Сохраняем полученные товары
+        setProducts(data); 
       }
       
-      setLoading(false); // Выключаем индикатор загрузки
+      setLoading(false); 
     };
 
     fetchProductsByCategory();
-  }, [categoryName]); // 4. ВАЖНО: React перезапустит запрос, если categoryName в URL изменится
+  }, [categoryName]); 
 
-  // Заголовок страницы в зависимости от категории
+  // Добавили подарки в словарь заголовков
   const titles = {
     flowers: "Свежие цветы",
     bouquets: "Авторские букеты",
-    events: "Оформление мероприятий"
+    events: "Оформление мероприятий",
+    gifts: "Подарки и сувениры" // <--- ДОБАВЛЕНО
   };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
-      <h1 className="text-4xl font-main mb-12 text-center capitalize">
+      <SEO 
+        title={titles[categoryName] || "Каталог"} 
+        description={`Посмотрите наши ${titles[categoryName] || "товаров"} в категории ${categoryName}.`} 
+      />
+        <h1 className="text-4xl font-main mb-12 text-center capitalize">
         {titles[categoryName] || "Каталог"}
       </h1>
 
-      {/* 5. Если грузится — показываем текст, если загрузилось — показываем сетку */}
       {loading ? (
         <p className="text-center opacity-50 text-xl font-main">Загрузка товаров...</p>
       ) : (
@@ -57,7 +58,7 @@ export default function CategoryPage() {
             {products.map(product => (
               <ProductCard 
                 key={product.id}
-                // 6. Не забываем про новые названия колонок и ID со складом
+                id={product.id} 
                 image={product.image_url}
                 title={product.title_ru}
                 price={product.price}

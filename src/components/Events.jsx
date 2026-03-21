@@ -1,3 +1,6 @@
+import React from 'react';
+import { Link } from 'react-router-dom'; 
+
 export default function Events() {
   return (
     <section className="px-0 md:px-16 py-0 md:py-12"> 
@@ -26,12 +29,12 @@ export default function Events() {
               способ восстановить внутренний баланс.
             </p>
 
-            <button className="btn-primary font-main text-xs uppercase tracking-[0.2em]">
+            <Link to="/events" className="btn-primary font-main text-xs uppercase tracking-[0.2em] inline-flex">
               Все мероприятия
-            </button>
+            </Link>
           </div>
         </div>
-
+    
       </div>
     </section>
   );

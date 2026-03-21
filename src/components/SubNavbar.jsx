@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function SubNavbar() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Скрываем, когда прокрутили больше 50px
       setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleScrollBottom = () => {
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+  };
 
   return (
     <div className="hidden md:flex justify-center w-full sticky top-[64px] z-40 pointer-events-none">
@@ -26,15 +30,17 @@ export default function SubNavbar() {
           ${isScrolled ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'}
         `}
       >
-        <span className="cursor-pointer hover:opacity-60 transition-opacity pb-0.5">
+        <Link to="/category/gifts" className="cursor-pointer hover:opacity-60 transition-opacity pb-0.5">
           Подарки
-        </span>
-        <span className="cursor-pointer hover:opacity-60 transition-opacity pb-0.5">
+        </Link>
+        
+        <Link to="/events" className="cursor-pointer hover:opacity-60 transition-opacity pb-0.5">
           Мероприятия
-        </span>
-        <span className="cursor-pointer hover:opacity-60 transition-opacity pb-0.5">
+        </Link>
+        
+        <button onClick={handleScrollBottom} className="cursor-pointer hover:opacity-60 transition-opacity pb-0.5">
           Связь с нами
-        </span>
+        </button>
       </div>
     </div>
   );
