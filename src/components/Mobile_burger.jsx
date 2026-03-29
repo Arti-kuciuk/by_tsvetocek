@@ -1,13 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function MobileMenu({ isOpen, onClose, currentLang, onLangChange }) {
+  const { t } = useTranslation();
+
   const menuItems = [
-    { name: 'Цветы', path: '/category/flowers' },
-    { name: 'Букеты', path: '/category/bouquets' },
-    { name: 'Подарки', path: '/category/gifts' },
-    { name: 'Мероприятия', path: '/events' },
-    { name: 'Связь с нами \\ график', action: 'scrollBottom' }
+    { name: t('nav.flowers'), path: '/category/flowers' },
+    { name: t('nav.bouquets'), path: '/category/bouquets' },
+    { name: t('nav.gifts'), path: '/category/gifts' },
+    { name: t('nav.events'), path: '/events' },
+    { name: t('nav.contactSchedule'), action: 'scrollBottom' }
   ];
 
   const languages = ['RU', 'RO'];

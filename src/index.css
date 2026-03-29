@@ -2,7 +2,8 @@
 
 @theme {
   --font-joliet: "Joliet", serif;
-  --font-main: "SN Pro", sans-serif;
+  /* --font-main: "SN Pro", sans-serif; */
+  --font-main: "Jost", sans-serif;
 }
 
 /* Подключаем Joliet (если он в public/fonts) */
@@ -28,7 +29,7 @@
     /* Цвет фона и текста */
     @apply bg-[#E6DBD1] text-[#4A3F35];
     
-    /* Основной шрифт сайта — SN Pro */
+    /* Основной шрифт сайта — Jost (раньше SN Pro, см. --font-main в @theme) */
     font-family: var(--font-main);
     letter-spacing: 0.1rem;
     

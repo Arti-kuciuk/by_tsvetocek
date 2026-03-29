@@ -19,6 +19,7 @@ import Footer from './components/Footer'
 import SubNavbar from './components/SubNavbar'
 
 import './index.css'
+import './i18n.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -27,15 +28,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <BrowserRouter>
         <ScrollToTop />
         
-        {/* Оболочка приложения для правильного прижатия футера */}
         <div className="flex flex-col min-h-screen">
           
           <Navbar />
 
           <SubNavbar />
 
-          {/* flex-grow заставляет этот блок занимать все свободное место, 
-              выталкивая футер вниз, если контента мало */}
           <main className="">
             <Routes>
               <Route path="/" element={<Home />} />

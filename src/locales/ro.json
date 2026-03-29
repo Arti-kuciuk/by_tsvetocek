@@ -1,0 +1,134 @@
+{
+  "nav": {
+    "flowers": "Flori",
+    "bouquets": "Buchete",
+    "gifts": "Cadouri",
+    "events": "Evenimente",
+    "contact": "Contactează-ne",
+    "contactSchedule": "Contact / program"
+  },
+  "common": {
+    "logoAlt": "Logo",
+    "searchAlt": "Căutare",
+    "cartAlt": "Coș"
+  },
+  "seo": {
+    "defaultTitle": "Butic de flori și cadouri | by tsvetocek",
+    "defaultDescription": "Buchete artistice, cadouri și cursuri de floristică la Chișinău, de la studioul by tsvetocek.",
+    "keywords": "by tsvetocek, flori Chișinău, livrare flori, buchete artistice, cadouri, floristică"
+  },
+  "home": {
+    "title": "Acasă",
+    "description": "Comandă cele mai proaspete buchete artistice cu livrare la Chișinău de la studioul by tsvetocek.",
+    "topSales": "Top vânzări",
+    "events": "Evenimente",
+    "gifts": "Cadouri"
+  },
+  "dailyBloom": {
+    "line1": "Estetică în fiecare floare",
+    "line2": "Prospețime la interior",
+    "line3": "Obicei",
+    "line4": "Cu dragoste pentru",
+    "line5": "fiecare petală",
+    "title": "Daily Bloom:",
+    "subtitle": "Aesthetics as a habit",
+    "imageAlt": "Daily Bloom",
+    "imageAltMobile": "Daily Bloom mobil"
+  },
+  "eventsBlock": {
+    "heading": "Creează frumusețea alături de noi",
+    "text": "În atelierul nostru creăm un spațiu unde fiecare se poate opri o clipă și găsi inspirație. Credem că creativitatea este cea mai bună cale de a-ți regăsi echilibrul interior.",
+    "cta": "Toate evenimentele",
+    "imageAlt": "Curs de floristică"
+  },
+  "giftsBlock": {
+    "heading": "Mai mult decât flori",
+    "text": "Completați surpriza cu detalii speciale. În colecția noastră veți găsi lumânări artizanale, dulciuri alese și felicitări lucrate manual care vor face cadoul cu adevărat de neuitat.",
+    "cta": "Vezi cadourile",
+    "imageAlt": "Cadouri și suveniruri"
+  },
+  "category": {
+    "titles": {
+      "flowers": "Flori proaspete",
+      "bouquets": "Buchete artistice",
+      "events": "Decor pentru evenimente",
+      "gifts": "Cadouri și suveniruri"
+    },
+    "catalogFallback": "Catalog",
+    "loading": "Se încarcă produsele...",
+    "empty": "În această categorie nu sunt încă produse.",
+    "seoDescription": "Colecția „{{title}}” — catalog by tsvetocek."
+  },
+  "product": {
+    "loading": "Se încarcă...",
+    "notFound": "Produsul nu a fost găsit.",
+    "backToCatalog": "← Înapoi la catalog",
+    "inStock": "În stoc: {{count}}",
+    "outOfStock": "Nu este în stoc",
+    "descriptionFallback": "Buchet artistic din flori alese.",
+    "quantity": "Cantitate",
+    "addToCart": "Adaugă în coș",
+    "noStockAlert": "Ne pare rău, acest produs nu este disponibil."
+  },
+  "productCard": {
+    "outOfStock": "Indisponibil"
+  },
+  "search": {
+    "placeholder": "Caută buchete și flori...",
+    "loading": "Căutăm...",
+    "empty": "Nu am găsit nimic pentru căutarea ta."
+  },
+  "cart": {
+    "fillRequired": "Completează numele, telefonul și adresa.",
+    "orderSuccess": "Comanda a fost plasată cu succes!",
+    "orderError": "A apărut o eroare la plasarea comenzii. Te rugăm să ne contactezi direct.",
+    "confirmClear": "Golești coșul?",
+    "backToShopping": "← Înapoi la cumpărături",
+    "clearAll": "Șterge tot",
+    "empty": "Coșul tău este gol",
+    "checkoutTitle": "Finalizare comandă",
+    "placeholderName": "NUMELE TĂU",
+    "placeholderPhone": "NUMĂR DE TELEFON",
+    "labelAddress": "Adresa de livrare",
+    "placeholderAddress": "STRADĂ, NR., AP.",
+    "labelCard": "Text pentru felicitare",
+    "placeholderComment": "SCRIE AICI...",
+    "toPay": "De plată:",
+    "submitProcessing": "Se procesează...",
+    "submitConfirm": "Confirmă comanda",
+    "telegramNoComment": "—",
+    "telegramBody": "🌸 **COMANDĂ NOUĂ** 🌸\n━━━━━━━━━━━━━━━━━━\n👤 **Client:** {{name}}\n📞 **Telefon:** {{phone}}\n📍 **Adresă:** {{address}}\n💬 **Comentariu:** {{comment}}\n━━━━━━━━━━━━━━━━━━\n🛍 **CONȚINUT:**\n{{items}}\n━━━━━━━━━━━━━━━━━━\n💰 **TOTAL: {{total}} MDL**"
+  },
+  "footer": {
+    "contact": "Contactează-ne",
+    "hours": "Program de lucru",
+    "weekdays": "Lun — Vin: 9:00 — 19:00",
+    "saturday": "Sâm: 10:00 — 17:00",
+    "sunday": "Dum: închis",
+    "payment": "Modalități de plată",
+    "cash": "Numerar la curier",
+    "cardSoon": "Cu cardul pe site (în curând)",
+    "p2p": "Transfer P2P",
+    "social": "Rețele sociale",
+    "tagline": "Cu dragoste pentru fiecare petală ♥"
+  },
+  "eventsPage": {
+    "back": "← Înapoi acasă",
+    "title": "Evenimente",
+    "intro": "Petreceți weekendul înconjurați de frumusețe. Alăturați-vă întâlnirilor noastre creative săptămânale.",
+    "register": "Înscrie-te",
+    "registerAlert": "Doriți să vă înscrieți la: {{title}}",
+    "artBrunch": {
+      "title": "Art-brunch: Desenarea florilor",
+      "day": "În fiecare sâmbătă",
+      "time": "11:00",
+      "description": "Intrați în lumea artei și floristicii. Cu îndrumarea unui artist veți transpune frumusețea florilor vii pe pânză. Perfect pentru relaxare și inspirație în weekend."
+    },
+    "masterclass": {
+      "title": "Masterclass: asamblarea unui buchet",
+      "day": "În fiecare duminică",
+      "time": "11:00",
+      "description": "Simțiți-vă florist adevărat. Vă vom vorbi despre compoziție, cromatică și veți învăța să creați buchete ideale cu propriile mâini, pe care le veți lua acasă."
+    }
+  }
+}

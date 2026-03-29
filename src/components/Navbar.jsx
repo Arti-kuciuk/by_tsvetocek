@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useCart } from '../context/CartContext';
 import MobileMenu from './Mobile_burger';
 import SearchModal from './SearchModal';
 
 export default function Navbar() {
+  const { t, i18n } = useTranslation();
   const { totalItems } = useCart(); 
   const [isOpen, setIsOpen] = useState(false); 
-  const [lang, setLang] = useState('RU'); // Возвращаем обычный стейт
+  const [lang, setLang] = useState(() => (i18n.language === 'ro' ? 'RO' : 'RU'));
   const [isPop, setIsPop] = useState(false);
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -27,8 +29,13 @@ export default function Navbar() {
     }
   }, [totalItems]);
 
+  const setLanguageCode = (code) => {
+    setLang(code);
+    void i18n.changeLanguage(code === 'RU' ? 'ru' : 'ro');
+  };
+
   const toggleLang = () => {
-    setLang(prev => prev === 'RU' ? 'RO' : 'RU');
+    setLanguageCode(lang === 'RU' ? 'RO' : 'RU');
   };
   
   return (
@@ -48,8 +55,8 @@ export default function Navbar() {
         
         {/* Ссылки (десктоп) */}
         <div className="hidden md:flex gap-x-6 text-xl font-sn text-[#4A3F35]">
-          <Link to="/category/flowers" className="hover:opacity-60 transition-opacity tracking-wider">Цветы</Link>
-          <Link to="/category/bouquets" className="hover:opacity-60 transition-opacity tracking-wider">Букеты</Link>
+          <Link to="/category/flowers" className="hover:opacity-60 transition-opacity tracking-wider">{t('nav.flowers')}</Link>
+          <Link to="/category/bouquets" className="hover:opacity-60 transition-opacity tracking-wider">{t('nav.bouquets')}</Link>
         </div>
 
         {/* Логотип */}
@@ -60,18 +67,18 @@ export default function Navbar() {
             className="text-4xl font-joliet select-none transition-opacity hover:opacity-70" 
             style={{ WebkitTextStroke: '0.5px #4A3F35' }}
           >
-          <img src="/logo_.png" alt="Логотип" className="h-10 md:h-14" />
+          <img src="/logo_.png" alt={t('common.logoAlt')} className="h-10 md:h-14" />
           </Link>
         </div>
 
         {/* Кнопки справа */}
         <div className="flex justify-end items-center gap-x-4 md:gap-x-6">
-          <button onClick={toggleLang} className="hidden md:flex text-xl mt-[1px] hover:opacity-60 transition-opacity uppercase font-normal text-[#4A3F35]">
+          <button onClick={toggleLang} className="hidden md:flex text-2xl justify-center items-center mt-[1px] mr-[-2px] hover:opacity-60 transition-opacity uppercase font-normal text-[#4A3F35]">
             {lang}
           </button>
 
           <button onClick={() => setIsSearchOpen(true)} className="hover:opacity-60">
-            <img src="/search.svg" alt="Поиск" className="h-6 w-6"/>
+            <img src="/search.svg" alt={t('common.searchAlt')} className="h-6 w-6"/>
           </button>
 
           {/* Кнопка корзины */}
@@ -79,7 +86,7 @@ export default function Navbar() {
             to="/cart" 
             className="relative hidden md:block hover:opacity-60 transition-transform active:scale-95"
           >
-            <img src="/basket.svg" alt="Корзина" className="h-6 w-8" />
+            <img src="/basket.svg" alt={t('common.cartAlt')} className="h-6 w-8" />
             
             {totalItems > 0 && (
               <span className={`
@@ -105,7 +112,7 @@ export default function Navbar() {
         isOpen={isOpen} 
         onClose={() => setIsOpen(false)} 
         currentLang={lang} 
-        onLangChange={(newLang) => setLang(newLang)}
+        onLangChange={setLanguageCode}
       />
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </nav>

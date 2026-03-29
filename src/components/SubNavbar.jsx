@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function SubNavbar() {
+  const { t } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -31,15 +33,15 @@ export default function SubNavbar() {
         `}
       >
         <Link to="/category/gifts" className="cursor-pointer hover:opacity-60 transition-opacity pb-0.5">
-          Подарки
+          {t('nav.gifts')}
         </Link>
         
         <Link to="/events" className="cursor-pointer hover:opacity-60 transition-opacity pb-0.5">
-          Мероприятия
+          {t('nav.events')}
         </Link>
         
         <button onClick={handleScrollBottom} className="cursor-pointer hover:opacity-60 transition-opacity pb-0.5">
-          Связь с нами
+          {t('nav.contact')}
         </button>
       </div>
     </div>

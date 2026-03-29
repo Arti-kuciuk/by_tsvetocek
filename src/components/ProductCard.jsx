@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function ProductCard({ id, image, title, price, stock, onAdd }) {
+  const { t } = useTranslation();
   const isOutOfStock = stock <= 0;
 
   return (
@@ -17,7 +19,7 @@ export default function ProductCard({ id, image, title, price, stock, onAdd }) {
 
       <hr className="border-[#4A3F35]/50"/>
 
-      <div className="px-6 pb-6 pt-4 flex flex-col items-center flex-1">
+      <div className="px-4 md:px-6 pb-6 pt-4 flex flex-col items-center flex-1">
         <Link to={`/product/${id}`} className="hover:opacity-70 transition-opacity">
           <h3 className="text-[#4A3F35] text-xl mb-3 md:mb-6 text-center">
             {title}
@@ -33,7 +35,7 @@ export default function ProductCard({ id, image, title, price, stock, onAdd }) {
               : 'btn-primary' 
           }`}
         >
-          {isOutOfStock ? 'Нет на складе' : `${price} MDL`}
+          {isOutOfStock ? t('productCard.outOfStock') : `${price} MDL`}
         </button>
       </div>
     </div>

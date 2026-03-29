@@ -1,24 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function EventsPage() {
+  const { t } = useTranslation();
+
+  const artBrunch = t('eventsPage.artBrunch', { returnObjects: true });
+  const masterclass = t('eventsPage.masterclass', { returnObjects: true });
+
   const events = [
-    {
-      id: 1,
-      title: 'Арт-бранч: Рисование цветов',
-      day: 'Каждую субботу',
-      time: '11:00',
-      description: 'Погрузитесь в мир искусства и флористики. Под руководством опытного художника мы перенесем красоту живых цветов на холст. Идеально для расслабления и поиска вдохновения на выходных.',
-      image: '/event2.png' 
-    },
-    {
-      id: 2,
-      title: 'Мастер-класс: Сборка букета',
-      day: 'Каждое воскресенье',
-      time: '11:00',
-      description: 'Почувствуйте себя настоящим флористом. Мы расскажем о правилах композиции, колористике и научим создавать идеальные букеты своими руками, которые вы заберете с собой.',
-      image: '/event1.png'
-    }
+    { id: 1, image: '/event2.png', ...artBrunch },
+    { id: 2, image: '/event1.png', ...masterclass }
   ];
 
   return (
@@ -26,16 +18,16 @@ export default function EventsPage() {
       
       <div className="md:px-16 px-6 pt-8 md:pt-10 mb-8 md:mb-12">
         <Link to="/" className="text-[#4A3F35]/70 text-[10px] md:text-sm uppercase tracking-[0.2em] hover:text-[#4A3F35] transition-colors flex items-center gap-2 w-fit border-b border-transparent hover:border-[#4A3F35]/30 pb-1">
-          ← Назад на главную
+          {t('eventsPage.back')}
         </Link>
       </div>
 
       <div className="md:px-16 px-6 mb-10 md:mb-16">
         <h1 className="text-4xl md:text-6xl font-main uppercase tracking-widest text-[#2D2A26]">
-          Мероприятия
+          {t('eventsPage.title')}
         </h1>
         <p className="mt-4 text-lg md:text-xl text-[#4A3F35]/70 max-w-2xl">
-          Проведите выходные в окружении красоты. Присоединяйтесь к нашим еженедельным творческим встречам.
+          {t('eventsPage.intro')}
         </p>
       </div>
 
@@ -66,10 +58,10 @@ export default function EventsPage() {
               
               <div className="mt-auto pt-6 border-t border-[#4A3F35]/10">
                 <button 
-                  onClick={() => alert(`Вы хотите записаться на: ${event.title}`)}
+                  onClick={() => alert(t('eventsPage.registerAlert', { title: event.title }))}
                   className="btn-primary w-full md:w-auto !m-0"
                 >
-                  Записаться
+                  {t('eventsPage.register')}
                 </button>
               </div>
             </div>

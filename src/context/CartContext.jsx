@@ -2,10 +2,30 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const CartContext = createContext();
 
+function normalizeCartItem(raw) {
+  if (raw == null || typeof raw !== 'object' || raw.id == null) return null;
+  return {
+    id: raw.id,
+    title_ru: raw.title_ru ?? raw.title ?? '',
+    title_ro: raw.title_ro ?? '',
+    price: raw.price,
+    image: raw.image,
+    stock: raw.stock,
+    quantity: Math.max(1, Number(raw.quantity) || 1),
+  };
+}
+
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
     const savedCart = localStorage.getItem('tsv_cart');
-    return savedCart ? JSON.parse(savedCart) : [];
+    if (!savedCart) return [];
+    try {
+      const parsed = JSON.parse(savedCart);
+      if (!Array.isArray(parsed)) return [];
+      return parsed.map(normalizeCartItem).filter(Boolean);
+    } catch {
+      return [];
+    }
   });
 
   useEffect(() => {
@@ -13,24 +33,40 @@ export const CartProvider = ({ children }) => {
   }, [cartItems]);
 
   const addToCart = (product) => {
+    const qty = Math.max(1, Number(product.quantity) || 1);
+    const itemPayload = {
+      id: product.id,
+      title_ru: product.title_ru ?? product.title ?? '',
+      title_ro: product.title_ro ?? '',
+      price: product.price,
+      image: product.image,
+      stock: product.stock,
+      quantity: qty,
+    };
+
     setCartItems((prev) => {
-      const existing = prev.find((item) => item.title === product.title);
+      const existing = prev.find((item) => item.id === product.id);
       if (existing) {
         return prev.map((item) =>
-          item.title === product.title
-            ? { ...item, quantity: item.quantity + 1 }
+          item.id === product.id
+            ? {
+                ...item,
+                title_ru: itemPayload.title_ru || item.title_ru,
+                title_ro: itemPayload.title_ro || item.title_ro,
+                quantity: item.quantity + qty,
+              }
             : item
         );
       }
-      return [...prev, { ...product, quantity: 1 }];
+      return [...prev, itemPayload];
     });
   };
 
-  const updateQuantity = (title, delta) => {
+  const updateQuantity = (id, delta) => {
     setCartItems((prev) =>
       prev
         .map((item) =>
-          item.title === title
+          item.id === id
             ? { ...item, quantity: Math.max(0, item.quantity + delta) }
             : item
         )

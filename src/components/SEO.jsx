@@ -1,11 +1,13 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
 
 export default function SEO({ title, description, image, url }) {
-  const siteName = "by tsvetocek";
-  const defaultTitle = "Бутик цветов и подарков | by tsvetocek";
+  const { t, i18n } = useTranslation(); 
   
-  const defaultDescription = "Авторские букеты, подарки и мастер-классы по флористике в Кишиневе от студии бай цветочек (by tsvetocek).";
+  const siteName = "by tsvetocek";
+  const defaultTitle = t('seo.defaultTitle');
+  const defaultDescription = t('seo.defaultDescription');
   const defaultImage = "https://by-tsvetocek.vercel.app/event1.png";
 
   const seoTitle = title ? `${title} | ${siteName}` : defaultTitle;
@@ -14,16 +16,21 @@ export default function SEO({ title, description, image, url }) {
   const seoUrl = url || "https://by-tsvetocek.vercel.app";
 
   return (
-    <Helmet>
+    <Helmet htmlAttributes={{ lang: i18n.language }}>
       <title>{seoTitle}</title>
       <meta name="description" content={seoDescription} />
-      <meta name="keywords" content="by tsvetocek, бай цветочек, цветы Кишинев, доставка цветов, авторские букеты, подарки, флористика" />
+      <meta name="keywords" content={t('seo.keywords')} />
 
       <meta property="og:type" content="website" />
       <meta property="og:title" content={seoTitle} />
       <meta property="og:description" content={seoDescription} />
       <meta property="og:image" content={seoImage} />
       <meta property="og:url" content={seoUrl} />
+      
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={seoTitle} />
+      <meta name="twitter:description" content={seoDescription} />
+      <meta name="twitter:image" content={seoImage} />
     </Helmet>
   );
 }

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '../backend/supabaseClient';
 import { useCart } from '../context/CartContext';
 import SEO from '../components/SEO';
+import { getProductTitle, getProductDescription } from '../utils/productLocale';
 
 export default function ProductPage() {
+  const { t, i18n } = useTranslation();
   const { id } = useParams();
   const { addToCart } = useCart();
   
@@ -34,13 +37,14 @@ export default function ProductPage() {
 
   const handleAddToCart = () => {
     if (product.stock_count !== null && product.stock_count <= 0) {
-      alert("К сожалению, этого товара нет в наличии.");
+      alert(t('product.noStockAlert'));
       return;
     }
 
     addToCart({
       id: product.id,
-      title: product.title_ru,
+      title_ru: product.title_ru,
+      title_ro: product.title_ro,
       price: product.price,
       image: (product.images && product.images.length > 0) ? product.images[0] : product.image_url,
       stock: product.stock_count,
@@ -48,79 +52,75 @@ export default function ProductPage() {
     });
   };
 
-  if (loading) return <div className="min-h-screen bg-[#E6DBD1] p-16 font-main text-2xl text-[#4A3F35] text-center">Загрузка...</div>;
-  if (!product) return <div className="min-h-screen bg-[#E6DBD1] p-16 font-main text-2xl text-[#4A3F35] text-center">Товар не найден.</div>;
+  if (loading) return <div className="min-h-screen bg-[#E6DBD1] p-16 font-main text-2xl text-[#4A3F35] text-center">{t('product.loading')}</div>;
+  if (!product) return <div className="min-h-screen bg-[#E6DBD1] p-16 font-main text-2xl text-[#4A3F35] text-center">{t('product.notFound')}</div>;
+
+  const displayTitle = getProductTitle(product, i18n.language);
+  const displayDescription = getProductDescription(product, i18n.language, t('product.descriptionFallback'));
 
   return (
     <div className="min-h-screen bg-[#E6DBD1] text-[#4A3F35] pb-20">
       <SEO 
-        title={product.title_ru} 
-        description={product.description_ru} 
+        title={displayTitle} 
+        description={displayDescription} 
       />  
       
-      {/* Кнопка Назад */}
       <div className="md:px-16 px-6 pt-8 md:pt-10 mb-6 md:mb-0">
         <Link to="/" className="text-[#4A3F35]/70 text-[10px] md:text-sm uppercase tracking-[0.2em] hover:text-[#4A3F35] transition-colors flex items-center gap-2 w-fit border-b border-transparent hover:border-[#4A3F35]/30 pb-1">
-          ← Назад в каталог
+          {t('product.backToCatalog')}
         </Link>
       </div>
 
-      {/* ГЛАВНЫЙ КОНТЕЙНЕР: items-stretch заставляет колонки быть одной высоты */}
+      {/* ГЛАВНЫЙ КОНТЕЙНЕР: items-stretch выравнивает колонки по высоте */}
       <div className="md:px-16 px-6 py-6 md:py-12 flex flex-col md:flex-row items-stretch gap-10 lg:gap-16">
         
-        {/* ЛЕВАЯ ЧАСТЬ: ГАЛЕРЕЯ */}
-        <div className="md:w-1/3 lg:w-[30%] w-full">
+        {/* ЛЕВАЯ КОЛОНКА */}
+        <div className="md:w-1/3 lg:w-[30%] w-full shrink-0 flex flex-col">
           {product.images && product.images.length > 0 ? (
             product.images.map((imgUrl, index) => (
-              <div key={index} className="rounded-[30px] md:rounded-[40px] overflow-hidden border border-[#4A3F35]/5 shadow-sm relative h-full">
+              <div key={index} className="rounded-[30px] md:rounded-[40px] overflow-hidden border border-[#4A3F35]/5 shadow-sm relative aspect-[3/4] w-full mb-4">
                 <img 
                   src={imgUrl} 
-                  alt={`${product.title_ru} - ${index + 1}`} 
+                  alt={`${displayTitle} - ${index + 1}`} 
                   className="w-full h-full object-cover"
                 />
               </div>
             ))
           ) : (
-            <div className="rounded-[30px] md:rounded-[40px] overflow-hidden border border-[#4A3F35]/5 shadow-sm h-full">
-              <img src={product.image_url} alt={product.title_ru} className="w-full h-full object-cover aspect-[3/4] md:aspect-auto" />
+            <div className="rounded-[30px] md:rounded-[40px] overflow-hidden border border-[#4A3F35]/5 shadow-sm relative aspect-[3/4] w-full h-full">
+              <img src={product.image_url} alt={displayTitle} className="w-full h-full object-cover" />
             </div>
           )}
         </div>
 
-        {/* ПРАВАЯ ЧАСТЬ: ИНФО (flex-col чтобы элементы шли сверху вниз) */}
-        <div className="md:w-2/3 lg:w-[70%] w-full flex flex-col">
+        {/* ПРАВАЯ КОЛОНКА (Текст и кнопки): flex-col занимает всю высоту */}
+        <div className="flex-1 w-full flex flex-col">
           
-          {/* ВЕРХНИЙ БЛОК: Заголовок, цена и описание */}
+          {/* Верхняя часть с текстом */}
           <div className="space-y-6 md:space-y-8">
-            
-            {/* Заголовок */}
             <h1 className="text-3xl md:text-4xl lg:text-[44px] font-main uppercase leading-tight tracking-wide text-[#2D2A26]">
-              {product.title_ru}
+              {displayTitle}
             </h1>
 
-            {/* Цена и Наличие */}
             <div className="flex flex-wrap items-center gap-4 border-t border-[#4A3F35]/20 pt-6">
               <p className="text-2xl md:text-3xl lg:text-4xl font-main text-[#2D2A26]">{product.price} MDL</p>
               {product.stock_count !== null && (
                 <p className={`text-[10px] md:text-[11px] uppercase tracking-[0.15em] px-3 py-1 rounded-full font-bold ${product.stock_count > 0 ? 'bg-[#73826A]/20 text-[#43523A]' : 'bg-red-800/10 text-red-800'}`}>
-                  {product.stock_count > 0 ? `В наличии: ${product.stock_count}` : 'Нет в наличии'}
+                  {product.stock_count > 0 ? t('product.inStock', { count: product.stock_count }) : t('product.outOfStock')}
                 </p>
               )}
             </div>
 
-            {/* Описание товара */}
             <div className="text-sm md:text-base lg:text-lg text-[#2D2A26]/80 leading-relaxed whitespace-pre-line pb-8">
-              {product.description_ru || 'Авторский букет из различных цветов.'}
+              {displayDescription}
             </div>
-            
           </div>
 
-          {/* НИЖНИЙ БЛОК: УПРАВЛЕНИЕ (mt-auto прижимает этот блок к низу колонки) */}
+          {/* Нижняя часть с кнопками: mt-auto прижимает этот блок к самому низу */}
           <div className="mt-auto pt-6 border-t border-[#4A3F35]/20 flex flex-col md:flex-row items-stretch gap-4 md:gap-6">
             
-            {/* Селектор количества */}
             <div className="w-full md:w-1/3 flex items-center justify-between border border-[#4A3F35] rounded-full bg-transparent px-5 py-3 md:py-0">
-              <span className="text-[10px] md:text-xs text-[#2D2A26]/70 uppercase tracking-[0.2em] font-medium">Количество</span>
+              <span className="text-[10px] md:text-xs text-[#2D2A26]/70 uppercase tracking-[0.2em] font-medium">{t('product.quantity')}</span>
               <div className="flex items-center gap-4">
                 <button 
                   onClick={() => setQuantity(q => Math.max(1, q - 1))}
@@ -136,14 +136,14 @@ export default function ProductPage() {
 
             {product.stock_count !== null && product.stock_count <= 0 ? (
               <button disabled className="btn-primary opacity-50 cursor-not-allowed flex-1 border-[#4A3F35]/50 text-[#4A3F35]/50 hover:bg-transparent hover:text-[#4A3F35]/50">
-                Нет в наличии
+                {t('product.outOfStock')}
               </button>
             ) : (
               <button 
                 onClick={handleAddToCart}
                 className="btn-primary flex-1 !m-0"
               >
-                Добавить в корзину
+                {t('product.addToCart')}
               </button>
             )}
           </div>
