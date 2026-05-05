@@ -5,6 +5,7 @@ import { supabase } from '../backend/supabaseClient';
 import { useCart } from '../context/CartContext';
 import SEO from '../components/SEO';
 import { getProductTitle, getProductDescription } from '../utils/productLocale';
+import FloatingCart from '../components/FloatingCart';
 
 export default function ProductPage() {
   const { t, i18n } = useTranslation();
@@ -151,6 +152,9 @@ export default function ProductPage() {
         </div>
 
       </div>
+
+      <FloatingCart />
+
     </div>
   );
 }

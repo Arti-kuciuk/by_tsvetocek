@@ -6,6 +6,7 @@ import { useCart } from '../context/CartContext';
 import { supabase } from '../backend/supabaseClient'; 
 import SEO from '../components/SEO';
 import { getProductTitle } from '../utils/productLocale';
+import FloatingCart from '../components/FloatingCart';
 
 const CATEGORY_KEYS = ['flowers', 'bouquets', 'events', 'gifts'];
 
@@ -84,6 +85,9 @@ export default function CategoryPage() {
           )}
         </>
       )}
+
+      <FloatingCart />
+      
     </div>
   );
 }
