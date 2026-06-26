@@ -1,16 +1,31 @@
 import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../backend/supabaseClient';
 import { useCart } from '../context/CartContext';
 import SEO from '../components/SEO';
 import { getProductTitle, getProductDescription } from '../utils/productLocale';
+import { getProductImage } from '../config/site';
+import { buildProductSchema } from '../utils/structuredData';
 import FloatingCart from '../components/FloatingCart';
 
 export default function ProductPage() {
   const { t, i18n } = useTranslation();
   const { id } = useParams();
   const { addToCart } = useCart();
+  
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const update = () => setIsMobile(mq.matches);
+
+    update();
+    mq.addEventListener('change', update);
+
+    return () => mq.removeEventListener('change', update);
+  }, []);
   
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -53,17 +68,40 @@ export default function ProductPage() {
     });
   };
 
-  if (loading) return <div className="min-h-screen bg-[#E6DBD1] p-16 font-main text-2xl text-[#4A3F35] text-center">{t('product.loading')}</div>;
-  if (!product) return <div className="min-h-screen bg-[#E6DBD1] p-16 font-main text-2xl text-[#4A3F35] text-center">{t('product.notFound')}</div>;
+  const displayTitle = product ? getProductTitle(product, i18n.language) : '';
+  const displayDescription = product
+    ? getProductDescription(product, i18n.language, t('product.descriptionFallback'))
+    : '';
 
-  const displayTitle = getProductTitle(product, i18n.language);
-  const displayDescription = getProductDescription(product, i18n.language, t('product.descriptionFallback'));
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#E6DBD1] p-16 font-main text-2xl text-[#4A3F35] text-center">
+        <SEO title={t('product.loading')} url={`/product/${id}`} />
+        {t('product.loading')}
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="min-h-screen bg-[#E6DBD1] p-16 font-main text-2xl text-[#4A3F35] text-center">
+        <SEO title={t('product.notFound')} noindex url={`/product/${id}`} />
+        {t('product.notFound')}
+      </div>
+    );
+  }
+
+  const productImage = getProductImage(product);
 
   return (
     <div className="min-h-screen bg-[#E6DBD1] text-[#4A3F35] pb-20">
       <SEO 
         title={displayTitle} 
-        description={displayDescription} 
+        description={displayDescription}
+        image={productImage}
+        url={`/product/${id}`}
+        type="product"
+        jsonLd={buildProductSchema(product, displayTitle, displayDescription)}
       />  
       
       <div className="md:px-16 px-6 pt-8 md:pt-10 mb-6 md:mb-0">
@@ -76,7 +114,12 @@ export default function ProductPage() {
       <div className="md:px-16 px-6 py-6 md:py-12 flex flex-col md:flex-row items-stretch gap-10 lg:gap-16">
         
         {/* ЛЕВАЯ КОЛОНКА */}
-        <div className="md:w-1/3 lg:w-[30%] w-full shrink-0 flex flex-col">
+        <motion.div
+          className="md:w-1/3 lg:w-[30%] w-full shrink-0 flex flex-col"
+          initial={{ opacity: 0, x: isMobile ? 40 : 80 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
           {product.images && product.images.length > 0 ? (
             product.images.map((imgUrl, index) => (
               <div key={index} className="rounded-[30px] md:rounded-[40px] overflow-hidden border border-[#4A3F35]/5 shadow-sm relative aspect-[3/4] w-full mb-4">
@@ -92,10 +135,15 @@ export default function ProductPage() {
               <img src={product.image_url} alt={displayTitle} className="w-full h-full object-cover" />
             </div>
           )}
-        </div>
+        </motion.div>
 
         {/* ПРАВАЯ КОЛОНКА (Текст и кнопки): flex-col занимает всю высоту */}
-        <div className="flex-1 w-full flex flex-col">
+        <motion.div
+          className="flex-1 w-full flex flex-col"
+          initial={{ opacity: 0, x: isMobile ? 60 : 120 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.15, ease: 'easeOut' }}
+        >
           
           {/* Верхняя часть с текстом */}
           <div className="space-y-6 md:space-y-8">
@@ -149,7 +197,7 @@ export default function ProductPage() {
             )}
           </div>
 
-        </div>
+        </motion.div>
 
       </div>
 

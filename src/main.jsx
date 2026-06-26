@@ -17,6 +17,7 @@ import ScrollToTop from './components/ScrollToTop'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import SubNavbar from './components/SubNavbar'
+import PageTransition from './components/PageTransition'
 
 import './index.css'
 import './i18n.jsx';
@@ -26,28 +27,27 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <CartProvider>
       <HelmetProvider>
       <BrowserRouter>
-        <ScrollToTop />
-        
-        <div className="flex flex-col min-h-screen">
-          
-          <Navbar />
+        <PageTransition>
+          <ScrollToTop />
 
-          <SubNavbar />
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <SubNavbar />
 
-          <main className="">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="/category/:categoryName" element={<CategoryPage />} />
-              <Route path="/product/:id" element={<ProductPage />} />
-              <Route path="/admin-tsv" element={<AdminPage />} />
-              <Route path="/events" element={<EventsPage />} />
-            </Routes>
-          </main>
-          
-          <Footer />
-        </div>
-        
+            <main>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/category/:categoryName" element={<CategoryPage />} />
+                <Route path="/product/:id" element={<ProductPage />} />
+                <Route path="/admin-tsv" element={<AdminPage />} />
+                <Route path="/events" element={<EventsPage />} />
+              </Routes>
+            </main>
+
+            <Footer />
+          </div>
+        </PageTransition>
       </BrowserRouter>
       </HelmetProvider>
     </CartProvider>

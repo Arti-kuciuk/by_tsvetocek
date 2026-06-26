@@ -1,13 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 export default function Events() {
   const { t } = useTranslation();
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const update = () => setIsMobile(mq.matches);
+
+    update();
+    mq.addEventListener('change', update);
+
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
   return (
-    <section className="px-0 md:px-16 py-0 md:py-12"> 
-      <div className="bg-[#E5DACE] md:rounded-[40px] md:border-[#4A3F35]/50 md:border-[1px] p-6 md:p-12 
+    <motion.section
+      className="px-0 md:px-16 py-0 md:py-12"
+      initial={{ opacity: 0, x: isMobile ? -40 : -80 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, amount: 0.25 }}
+      transition={{
+        duration: 0.65,
+        ease: 'easeOut'
+      }}
+    > 
+      <div className="bg-[#E5DACE] md:rounded-[40px] md:border-[#4A3F35]/50 md:border-[1px] p-6 md:p-14
                       flex flex-col md:flex-row md:items-stretch gap-y-8 md:gap-x-20 relative overflow-hidden">
         
         <div className="w-full md:w-1/3 aspect-[4/5] md:aspect-square shrink-0">
@@ -35,6 +57,6 @@ export default function Events() {
         </div>
     
       </div>
-    </section>
+    </motion.section>
   );
 }

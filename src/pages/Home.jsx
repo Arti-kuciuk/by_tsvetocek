@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import DailyBloom from '../components/DailyBloom';
 import ProductCard from '../components/ProductCard';
@@ -9,6 +10,8 @@ import SEO from '../components/SEO';
 import { useCart } from '../context/CartContext';
 import { supabase } from '../backend/supabaseClient';
 import { getProductTitle } from '../utils/productLocale';
+import { getTopInStock } from '../utils/productStock';
+import { buildLocalBusinessSchema } from '../utils/structuredData';
 
 export default function Home() {
   const { t, i18n } = useTranslation();
@@ -21,12 +24,12 @@ export default function Home() {
         .from('products')
         .select('*')
         .order('sales_count', { ascending: false })
-        .limit(4); 
-  
+        .limit(20);
+
       if (error) {
         console.error('Ошибка:', error);
       } else {
-        setDbProducts(data);
+        setDbProducts(getTopInStock(data ?? [], 4));
       }
     };
   
@@ -36,42 +39,56 @@ export default function Home() {
   return (
     <div className='min-h-screen bg-[#E6DBD1]'>
       <SEO 
-        title={t('home.title')} 
-        description={t('home.description')} 
+        description={t('home.description')}
+        url="/"
+        jsonLd={buildLocalBusinessSchema(t)}
       />
+
+      <h1 className="sr-only">{t('seo.defaultTitle')}</h1>
 
       {/* DAILY BLOOM */}
       <DailyBloom />
 
       {/* ТОП ПРОДАЖ */}
       <div className='flex items-start px-6 md:px-16 mt-8'>
-        <h1 className='font-main text-[#4A3F35] text-4xl md:text-5xl tracking-wider'>{t('home.topSales')}</h1>
+        <h2 className='font-main text-[#4A3F35] text-4xl md:text-5xl tracking-wider'>{t('home.topSales')}</h2>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 md:gap-8 gap-6 md:px-16 px-4 py-4 md:py-8">
-        {dbProducts.map((product) => (
-          <ProductCard 
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-8 gap-4 md:px-16 px-4 py-4 md:py-8">
+        {dbProducts.map((product, i) => (
+          <motion.div
             key={product.id}
-            id={product.id} 
-            image={product.image_url} 
-            title={getProductTitle(product, i18n.language)} 
-            price={product.price}
-            stock={product.stock_count} 
-            onAdd={() => addToCart({
-              id: product.id, 
-              title_ru: product.title_ru,
-              title_ro: product.title_ro,
-              price: product.price,
-              image: product.image_url,
-              stock: product.stock_count
-            })}
-          />
+            initial={{ opacity: 0, x: 80 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{
+              duration: 0.6,
+              ease: "easeOut",
+              delay: i * 0.08
+            }}
+          >
+            <ProductCard 
+              id={product.id} 
+              image={product.image_url} 
+              title={getProductTitle(product, i18n.language)} 
+              price={product.price}
+              stock={product.stock_count} 
+              onAdd={() => addToCart({
+                id: product.id, 
+                title_ru: product.title_ru,
+                title_ro: product.title_ro,
+                price: product.price,
+                image: product.image_url,
+                stock: product.stock_count
+              })}
+            />
+          </motion.div>
         ))}
       </div>
 
       {/* МЕРОПРИЯТИЯ */}
       <div className='flex items-start px-6 md:px-16 pt-4'>
-        <h1 className='text-[#4A3F35] text-4xl md:text-5xl tracking-wider'>{t('home.events')}</h1>
+        <h2 className='text-[#4A3F35] text-4xl md:text-5xl tracking-wider'>{t('home.events')}</h2>
       </div>
 
       <Events />
@@ -79,7 +96,7 @@ export default function Home() {
 
       {/* ПОДАРКИ */}
       <div className='flex items-start px-6 md:px-16 pt-4'>
-        <h1 className='text-[#4A3F35] text-4xl md:text-5xl tracking-wider'>{t('home.gifts')}</h1>
+        <h2 className='text-[#4A3F35] text-4xl md:text-5xl tracking-wider'>{t('home.gifts')}</h2>
       </div>
 
       <Gifts />

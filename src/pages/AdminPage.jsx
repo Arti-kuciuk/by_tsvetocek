@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { supabase } from '../backend/supabaseClient';
 import { useDropzone } from 'react-dropzone';
+import SEO from '../components/SEO';
 
 // ─── BIRTHDAY HELPERS ────────────────────────────────────────────────────────
 const isBirthdayToday = () => {
@@ -594,7 +595,9 @@ export default function AdminPage() {
   // ── РЕНДЕР: ФОРМА ЛОГИНА ────────────────────────────────────────────────────
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#E6DBD1] flex items-center justify-center p-6">
+      <>
+        <SEO title="Admin" noindex url="/admin-tsv" />
+        <div className="min-h-screen bg-[#E6DBD1] flex items-center justify-center p-6">
         <div className="bg-[#DAC7B6]/30 p-10 rounded-[40px] shadow-sm border border-[#4A3F35]/5 w-full max-w-md">
           <h2 className="text-3xl font-main text-[#4A3F35] uppercase tracking-widest mb-8 text-center">
             Вход в систему
@@ -629,12 +632,15 @@ export default function AdminPage() {
           </form>
         </div>
       </div>
+      </>
     );
   }
 
   // ── РЕНДЕР: АДМИН-ПАНЕЛЬ ────────────────────────────────────────────────────
   return (
-    <div
+    <>
+      <SEO title="Admin" noindex url="/admin-tsv" />
+      <div
       className="min-h-screen p-6 pt-8 md:px-16 md:py-0"
       style={{
         background: showBirthdayDecor
@@ -855,5 +861,6 @@ export default function AdminPage() {
         </div>
       )}
     </div>
+    </>
   );
 }

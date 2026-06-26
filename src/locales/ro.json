@@ -13,7 +13,7 @@
     "cartAlt": "Coș"
   },
   "seo": {
-    "defaultTitle": "Butic de flori și cadouri | by tsvetocek",
+    "defaultTitle": "by tsvetocek",
     "defaultDescription": "Buchete artistice, cadouri și cursuri de floristică la Chișinău, de la studioul by tsvetocek.",
     "keywords": "by tsvetocek, flori Chișinău, livrare flori, buchete artistice, cadouri, floristică"
   },
@@ -79,6 +79,8 @@
     "empty": "Nu am găsit nimic pentru căutarea ta."
   },
   "cart": {
+    "seoTitle": "Coș",
+    "seoDescription": "Finalizarea comenzii în buticul by tsvetocek.",
     "fillRequired": "Completează numele, telefonul și adresa.",
     "orderSuccess": "Comanda a fost plasată cu succes!",
     "orderError": "A apărut o eroare la plasarea comenzii. Te rugăm să ne contactezi direct.",
@@ -115,6 +117,7 @@
   "eventsPage": {
     "back": "← Înapoi acasă",
     "title": "Evenimente",
+    "seoDescription": "Art brunch-uri și cursuri de floristică la studioul by tsvetocek din Chișinău.",
     "intro": "Petreceți weekendul înconjurați de frumusețe. Alăturați-vă întâlnirilor noastre creative săptămânale.",
     "register": "Înscrie-te",
     "registerAlert": "Doriți să vă înscrieți la: {{title}}",

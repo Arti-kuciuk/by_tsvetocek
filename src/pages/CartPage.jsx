@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useCart } from '../context/CartContext'; 
 import { supabase } from '../backend/supabaseClient';
 import { getProductTitle } from '../utils/productLocale';
+import SEO from '../components/SEO';
 
 export default function CartPage() {
   const { t, i18n } = useTranslation();
@@ -100,6 +101,12 @@ export default function CartPage() {
 
   return (
     <div className="min-h-screen bg-[#E6DBD1] p-6 md:px-16 md:py-12">
+      <SEO
+        title={t('cart.seoTitle')}
+        description={t('cart.seoDescription')}
+        url="/cart"
+        noindex
+      />
       <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
         
         <div className="flex-1">

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /cart
+Disallow: /admin-tsv
+
+Sitemap: https://by-tsvetocek.vercel.app/sitemap.xml

@@ -63,7 +63,10 @@ export default function Navbar() {
         <div className="flex justify-center">
           <Link 
             to="/" 
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = '/';
+            }}
             className="text-4xl font-joliet select-none transition-opacity hover:opacity-70" 
             style={{ WebkitTextStroke: '0.5px #4A3F35' }}
           >
