@@ -50,7 +50,7 @@ export default function Home() {
       <DailyBloom />
 
       {/* ТОП ПРОДАЖ */}
-      <div className='flex items-start px-6 md:px-16 mt-8'>
+      <div className='flex items-start px-6 md:px-16 mt-0 md:mt-8'>
         <h2 className='font-main text-[#4A3F35] text-4xl md:text-5xl tracking-wider'>{t('home.topSales')}</h2>
       </div>
       

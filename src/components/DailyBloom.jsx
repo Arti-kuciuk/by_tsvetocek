@@ -57,10 +57,10 @@ export default function DailyBloom() {
   };
 
   return (
-    <section className="px-6 md:px-16 py-12">
+    <section className="px-6 md:px-16 pt-8 pb-12">
       {/* Desktop Version */}
       <motion.div
-        className="hidden md:flex bg-[#E5DACE] md:rounded-[40px] md:border-[#4A3F35]/50 md:border-[1px] p-14 flex-row md:items-stretch gap-x-10 relative overflow-hidden"
+        className="hidden md:flex bg-[#E5DACE] md:rounded-[40px] md:border-[#4A3F35]/50 md:border-[1px] p-12 flex-row md:items-stretch gap-x-10 relative overflow-hidden"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -110,7 +110,7 @@ export default function DailyBloom() {
 
       {/* Mobile Version */}
       <motion.div 
-        className="flex md:hidden flex-col"
+        className="flex md:hidden flex-col mt-[-20px]"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.1 }}
@@ -118,7 +118,7 @@ export default function DailyBloom() {
       >
         <motion.h2
           variants={textVariants}
-          className="font-joliet text-[16vw] text-[#2D2A26] leading-none my-4"
+          className="font-joliet text-[16vw] text-[#2D2A26] leading-none mb-4"
           style={{ WebkitTextStroke: '0.5px #4A3F35' }}
         >
           {t('dailyBloom.title')}
@@ -126,7 +126,7 @@ export default function DailyBloom() {
 
         <motion.div 
           variants={imageVariants}
-          className="bg-[#E5DACE] border-[#4A3F35]/50 border-[1px] rounded-[30px] p-6 mb-2 flex flex-col"
+          className="bg-[#E5DACE] border-[#4A3F35]/50 border-[1px] rounded-[30px] pt-8 px-8 pb-4 flex flex-col"
         >
           <div className="w-full aspect-[9/16] border-[#4A3F35]/40 border-[1px] rounded-[20px] overflow-hidden">
             <img 
@@ -138,7 +138,7 @@ export default function DailyBloom() {
 
           <motion.h2 
             variants={textVariants}
-            className="font-joliet text-[9vw] text-[#2D2A26] leading-none mt-6 self-end text-right"
+            className="font-joliet text-[9vw] text-[#2D2A26] leading-none mt-4 self-end text-right"
             style={{ WebkitTextStroke: '0.5px #4A3F35' }}
           >
             {t('dailyBloom.subtitle')}

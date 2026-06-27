@@ -39,7 +39,7 @@ export default function Navbar() {
   };
   
   return (
-    <nav className="sticky top-0 z-50 w-full bg-[#DAC7B6] border-[#4A3F35]/50 border-b px-6 py-4 md:px-12">
+    <nav className="sticky top-0 z-50 w-full bg-[#DAC7B6] border-[#4A3F35]/50 border-b px-6 py-3 md:px-12">
       <div className="flex justify-between md:grid md:grid-cols-3 items-center">
 
         {/* Бургер (мобилка) */}
@@ -70,7 +70,7 @@ export default function Navbar() {
             className="text-4xl font-joliet select-none transition-opacity hover:opacity-70" 
             style={{ WebkitTextStroke: '0.5px #4A3F35' }}
           >
-          <img src="/logo_.png" alt={t('common.logoAlt')} className="h-10 md:h-14" />
+          <img src="/logo_.png" alt={t('common.logoAlt')} className="h-8 md:h-12" />
           </Link>
         </div>
 

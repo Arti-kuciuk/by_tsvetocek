@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useParams } from 'react-router-dom';
+import { useParams, Link  } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ProductCard from '../components/ProductCard';
 import { useCart } from '../context/CartContext';
@@ -70,6 +70,12 @@ export default function CategoryPage() {
         description={t('category.seoDescription', { title: displayTitle })}
         url={`/category/${categoryName}`}
       />
+
+      <div className="md:px-16 px-6 pt-8 md:pt-10 mb-8 md:mb-12">
+        <Link to="/" className="text-[#4A3F35]/70 text-[10px] md:text-sm uppercase tracking-[0.2em] hover:text-[#4A3F35] transition-colors flex items-center gap-2 w-fit border-b border-transparent hover:border-[#4A3F35]/30 pb-1">
+          {t('category.back')}
+        </Link>
+      </div>
       
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
