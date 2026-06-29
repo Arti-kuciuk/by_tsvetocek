@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { CartProvider } from './context/CartContext'
 import { HelmetProvider } from 'react-helmet-async'; 
+import { Analytics } from '@vercel/analytics/react';
 
 // Страницы
 import Home from './pages/Home'
@@ -48,6 +49,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Footer />
           </div>
         </PageTransition>
+
+        <Analytics />
+        
       </BrowserRouter>
       </HelmetProvider>
     </CartProvider>
