@@ -115,6 +115,25 @@
     "social": "Rețele sociale",
     "tagline": "Cu dragoste pentru fiecare petală ♥"
   },
+  "eventRegistration": {
+    "title": "Înscriere la eveniment",
+    "chooseDate": "Alegeți data",
+    "loadingSpots": "Se verifică locurile disponibile...",
+    "spotsLeft": "Locuri rămase: {{spotsLeft}} din {{capacity}}",
+    "noSpots": "Nu mai sunt locuri disponibile pentru această dată",
+    "name": "Numele dvs.",
+    "phone": "Telefon",
+    "email": "Email sau Telegram",
+    "comment": "Comentariu",
+    "submit": "Trimite înscrierea",
+    "sending": "Se trimite...",
+    "noSpotsButton": "Nu sunt locuri",
+    "successTitle": "Mulțumim!",
+    "successText": "Înscrierea dvs. a fost trimisă. Vă vom contacta pentru confirmare.",
+    "noSpotsAlert": "Nu mai sunt locuri disponibile pentru această dată",
+    "submitError": "Eroare la trimiterea înscrierii",
+    "loadSpotsError": "Eroare la încărcarea locurilor disponibile:"
+  },
   "eventsPage": {
     "back": "← Înapoi acasă",
     "title": "Evenimente",

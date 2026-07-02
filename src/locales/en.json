@@ -115,6 +115,25 @@
     "social": "Social media",
     "tagline": "With love for every petal ♥"
   },
+  "eventRegistration": {
+    "title": "Event registration",
+    "chooseDate": "Choose a date",
+    "loadingSpots": "Checking available spots...",
+    "spotsLeft": "Spots left: {{spotsLeft}} of {{capacity}}",
+    "noSpots": "No spots available for this date",
+    "name": "Your name",
+    "phone": "Phone number",
+    "email": "Email or Telegram",
+    "comment": "Comment",
+    "submit": "Submit registration",
+    "sending": "Submitting...",
+    "noSpotsButton": "No spots left",
+    "successTitle": "Thank you!",
+    "successText": "Your registration has been submitted. We'll contact you to confirm your booking.",
+    "noSpotsAlert": "There are no spots left for this date",
+    "submitError": "Failed to submit registration",
+    "loadSpotsError": "Failed to load available spots:"
+  },
   "eventsPage": {
     "back": "← Back to home",
     "title": "Events",

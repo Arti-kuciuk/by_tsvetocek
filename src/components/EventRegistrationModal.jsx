@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { supabase } from '../backend/supabaseClient';
 
@@ -59,7 +60,9 @@ const getAvailableEventDates = (event) => {
   return dates;
 };
 
-export default function EventRegistrationModal({ event, onClose, t }) {
+export default function EventRegistrationModal({ event, onClose }) {
+  const { t } = useTranslation();
+
   const [form, setForm] = useState({
     name: '',
     phone: '',
@@ -103,7 +106,7 @@ export default function EventRegistrationModal({ event, onClose, t }) {
         .neq('status', 'cancelled');
 
       if (error) {
-        console.error('Ошибка загрузки свободных мест:', error);
+        console.error(t('eventRegistration.loadSpotsError'), error);
         setSpotsLeft(EVENT_CAPACITY);
       } else {
         setSpotsLeft(Math.max(EVENT_CAPACITY - (count ?? 0), 0));
@@ -113,7 +116,7 @@ export default function EventRegistrationModal({ event, onClose, t }) {
     };
 
     fetchSpotsLeft();
-  }, [event, selectedDate]);
+  }, [event, selectedDate, t]);
 
   if (!event) return null;
 
@@ -128,7 +131,7 @@ export default function EventRegistrationModal({ event, onClose, t }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (spotsLeft <= 0) {
-      alert('На эту дату больше нет свободных мест');
+      alert(t('eventRegistration.noSpotsAlert'));
       return;
     }
     setLoading(true);
@@ -149,7 +152,7 @@ export default function EventRegistrationModal({ event, onClose, t }) {
 
     if (error) {
       console.error(error);
-      alert('Ошибка отправки заявки');
+      alert(t('eventRegistration.submitError'));
       return;
     }
 
@@ -168,21 +171,21 @@ export default function EventRegistrationModal({ event, onClose, t }) {
 
         {success ? (
           <div className="py-10 text-center">
-            <h2 className="text-3xl font-main mb-4">Спасибо!</h2>
+            <h2 className="text-3xl font-main mb-4">{t('eventRegistration.successTitle')}</h2>
             <p className="text-[#4A3F35]/70">
-              Ваша заявка отправлена. Мы свяжемся с вами для подтверждения записи.
+              {t('eventRegistration.successText')}
             </p>
           </div>
         ) : (
           <>
-            <h2 className="text-3xl font-main mb-2">Запись на мероприятие</h2>
+            <h2 className="text-3xl font-main mb-2">{t('eventRegistration.title')}</h2>
             <p className="text-[#4A3F35]/70 mb-6">
               {event.title} • {event.day} • {event.time}
             </p>
 
             <div className="mb-6">
               <p className="text-[10px] uppercase tracking-[0.2em] text-[#4A3F35]/60 mb-3">
-                Выберите дату
+                {t('eventRegistration.chooseDate')}
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -208,10 +211,10 @@ export default function EventRegistrationModal({ event, onClose, t }) {
               </div>
               <p className="mt-3 text-sm text-[#4A3F35]/70">
                 {loadingSpots
-                  ? 'Проверяем свободные места...'
+                  ? t('eventRegistration.loadingSpots')
                   : spotsLeft > 0
-                    ? `Осталось мест: ${spotsLeft} из ${EVENT_CAPACITY}`
-                    : 'На эту дату мест больше нет'}
+                    ? t('eventRegistration.spotsLeft', { spotsLeft, capacity: EVENT_CAPACITY })
+                    : t('eventRegistration.noSpots')}
               </p>
             </div>
 
@@ -221,7 +224,7 @@ export default function EventRegistrationModal({ event, onClose, t }) {
                 value={form.name}
                 onChange={handleChange}
                 required
-                placeholder="Ваше имя"
+                placeholder={t('eventRegistration.name')}
                 className="w-full bg-transparent border border-[#4A3F35]/30 rounded-full px-5 py-3 outline-none"
               />
 
@@ -230,7 +233,7 @@ export default function EventRegistrationModal({ event, onClose, t }) {
                 value={form.phone}
                 onChange={handleChange}
                 required
-                placeholder="Телефон"
+                placeholder={t('eventRegistration.phone')}
                 className="w-full bg-transparent border border-[#4A3F35]/30 rounded-full px-5 py-3 outline-none"
               />
 
@@ -238,7 +241,7 @@ export default function EventRegistrationModal({ event, onClose, t }) {
                 name="email"
                 value={form.email}
                 onChange={handleChange}
-                placeholder="Email или Telegram"
+                placeholder={t('eventRegistration.email')}
                 className="w-full bg-transparent border border-[#4A3F35]/30 rounded-full px-5 py-3 outline-none"
               />
 
@@ -247,13 +250,13 @@ export default function EventRegistrationModal({ event, onClose, t }) {
                 name="comment"
                 value={form.comment}
                 onChange={handleChange}
-                placeholder="Комментарий"
+                placeholder={t('eventRegistration.comment')}
                 rows="3"
                 className="w-full bg-transparent border border-[#4A3F35]/30 rounded-[20px] px-5 py-3 outline-none resize-none"
               />
 
               <button disabled={loading || loadingSpots || !selectedDate || spotsLeft <= 0} className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed">
-                {loading ? 'Отправляем...' : spotsLeft <= 0 ? 'Мест нет' : 'Отправить заявку'}
+                {loading ? t('eventRegistration.sending') : spotsLeft <= 0 ? t('eventRegistration.noSpotsButton') : t('eventRegistration.submit')}
               </button>
             </form>
           </>
