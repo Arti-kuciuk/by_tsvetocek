@@ -20,8 +20,16 @@ const getEventHour = (time) => {
   };
 };
 
-const formatEventDate = (date) =>
-  new Intl.DateTimeFormat('ru-RU', {
+const getDateLocale = (language) => {
+  const code = String(language || '').split('-')[0];
+
+  if (code === 'ro') return 'ro-RO';
+  if (code === 'en') return 'en-US';
+  return 'ru-RU';
+};
+
+const formatEventDate = (date, language) =>
+  new Intl.DateTimeFormat(getDateLocale(language), {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
@@ -61,7 +69,7 @@ const getAvailableEventDates = (event) => {
 };
 
 export default function EventRegistrationModal({ event, onClose }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [form, setForm] = useState({
     name: '',
@@ -204,7 +212,7 @@ export default function EventRegistrationModal({ event, onClose }) {
                           : 'border-[#4A3F35]/30 text-[#4A3F35] hover:border-[#4A3F35]'
                       }`}
                     >
-                      <span>{formatEventDate(date)}</span>
+                      <span>{formatEventDate(date, i18n.language)}</span>
                     </button>
                   );
                 })}
