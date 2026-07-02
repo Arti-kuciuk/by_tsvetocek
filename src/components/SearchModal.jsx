@@ -2,7 +2,46 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../backend/supabaseClient';
-import { getProductTitle, isRomanian } from '../utils/productLocale';
+import { getProductTitle } from '../utils/productLocale';
+
+/** null = неизвестно; после первого запроса кэшируем наличие колонки */
+let titleEnColumnAvailable = null;
+
+function isMissingTitleEnError(error) {
+  const message = String(error?.message || '').toLowerCase();
+  return message.includes('title_en') && message.includes('does not exist');
+}
+
+async function fetchSearchResults(term, limit = 5) {
+  const pattern = `%${term}%`;
+
+  if (titleEnColumnAvailable !== false) {
+    const withEn = await supabase
+      .from('products')
+      .select('id, title_ru, title_ro, title_en, price, image_url')
+      .or(`title_ru.ilike.${pattern},title_ro.ilike.${pattern},title_en.ilike.${pattern}`)
+      .limit(limit);
+
+    if (!withEn.error) {
+      titleEnColumnAvailable = true;
+      return { data: withEn.data ?? [], error: null };
+    }
+
+    if (!isMissingTitleEnError(withEn.error)) {
+      return { data: [], error: withEn.error };
+    }
+
+    titleEnColumnAvailable = false;
+  }
+
+  const withoutEn = await supabase
+    .from('products')
+    .select('id, title_ru, title_ro, price, image_url')
+    .or(`title_ru.ilike.${pattern},title_ro.ilike.${pattern}`)
+    .limit(limit);
+
+  return { data: withoutEn.data ?? [], error: withoutEn.error };
+}
 
 export default function SearchModal({ isOpen, onClose }) {
   const { t, i18n } = useTranslation();
@@ -25,20 +64,12 @@ export default function SearchModal({ isOpen, onClose }) {
 
     const searchProducts = async () => {
       setIsLoading(true);
-      const pattern = `%${query.trim()}%`;
-      let req = supabase
-        .from('products')
-        .select('id, title_ru, title_ro, price, image_url');
+      const { data, error } = await fetchSearchResults(query.trim());
 
-      if (isRomanian(i18n.language)) {
-        req = req.or(`title_ro.ilike.${pattern},title_ru.ilike.${pattern}`);
+      if (error) {
+        console.error('Search error:', error);
+        setResults([]);
       } else {
-        req = req.ilike('title_ru', pattern);
-      }
-
-      const { data, error } = await req.limit(5);
-
-      if (!error && data) {
         setResults(data);
       }
       setIsLoading(false);

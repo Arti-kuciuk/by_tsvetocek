@@ -12,6 +12,33 @@ const isBirthdayToday = () => {
 const isDariaAccount = (username) =>
   username?.toLowerCase().trim() === 'dasha';
 
+// ─── EVENTS ADMIN HELPERS ────────────────────────────────────────────────────
+const EVENT_CAPACITY = 15;
+
+const ADMIN_EVENTS = [
+  {
+    id: '1',
+    title: 'Арт-бранч: Рисование цветов',
+    emoji: '🎨',
+  },
+  {
+    id: '2',
+    title: 'Мастер-класс по сборке букета',
+    emoji: '💐',
+  },
+];
+
+const formatEventDate = (dateString) => {
+  if (!dateString) return 'Дата не выбрана';
+
+  return new Date(dateString).toLocaleDateString('ru-RU', {
+    weekday: 'long',
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  });
+};
+
 // ─── ПАСХАЛКА: ЦВЕТОЧЕК В ХЕДЕРЕ ─────────────────────────────────────────────
 function BirthdayFlower({ onClick }) {
   return (
@@ -405,6 +432,8 @@ export default function AdminPage() {
 
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
+  const [eventRegistrations, setEventRegistrations] = useState([]);
+  const [eventsLoading, setEventsLoading] = useState(false);
   const [dailyBloomImageUrl, setDailyBloomImageUrl] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
@@ -458,16 +487,24 @@ export default function AdminPage() {
     setUsername('');
     setPassword('');
     setActiveTab('menu');
+    setEventRegistrations([]);
     setShowBirthdayLetter(false);
   };
 
   const fetchData = async () => {
     setOrdersLoading(true);
     setUploadError('');
+    setEventsLoading(true);
 
     const { data: ordersData, error: ordersError } = await supabase
       .from('orders')
       .select('*')
+      .order('created_at', { ascending: false });
+
+    const { data: registrationsData, error: registrationsError } = await supabase
+      .from('event_registrations')
+      .select('*')
+      .order('event_date', { ascending: true })
       .order('created_at', { ascending: false });
 
     const { data: settingsData, error: settingsError } = await supabase
@@ -502,9 +539,16 @@ export default function AdminPage() {
       setOrders(sortedOrders);
     }
 
+    if (!registrationsError && registrationsData) {
+      setEventRegistrations(registrationsData);
+    } else if (registrationsError) {
+      console.error('Ошибка загрузки записей на мероприятия:', registrationsError);
+    }
+
     if (!settingsError && settingsData) {
       setDailyBloomImageUrl(settingsData.value);
     }
+    setEventsLoading(false);
     setOrdersLoading(false);
   };
 
@@ -589,6 +633,34 @@ export default function AdminPage() {
     new Date(dateString).toLocaleString('ru-RU', {
       day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',
     });
+
+  const activeEventRegistrations = eventRegistrations.filter(reg => reg.status !== 'cancelled');
+
+  const getRegistrationsForEvent = (eventId) =>
+    activeEventRegistrations.filter(reg => String(reg.event_id) === String(eventId));
+
+  const getEventDateGroups = (eventId) => {
+    const registrations = getRegistrationsForEvent(eventId);
+
+    const groups = registrations.reduce((acc, reg) => {
+      const key = reg.event_date || 'no-date';
+
+      if (!acc[key]) {
+        acc[key] = {
+          date: reg.event_date,
+          time: reg.event_time,
+          registrations: [],
+        };
+      }
+
+      acc[key].registrations.push(reg);
+      return acc;
+    }, {});
+
+    return Object.values(groups);
+  };
+
+  const totalEventRegistrations = activeEventRegistrations.length;
 
   const showBirthdayDecor = isBirthday && isDariaAccount(loggedInUser);
 
@@ -699,7 +771,13 @@ export default function AdminPage() {
 
       {/* ЗАГОЛОВОК */}
       <h1 className="text-3xl md:text-4xl font-main text-[#4A3F35] uppercase mb-8 flex items-center gap-3">
-        {activeTab === 'menu' ? 'Панель управления' : activeTab === 'bloom' ? 'Daily Bloom' : 'Список заказов'}
+        {activeTab === 'menu'
+          ? 'Панель управления'
+          : activeTab === 'bloom'
+            ? 'Daily Bloom'
+            : activeTab === 'orders'
+              ? 'Список заказов'
+              : 'Мероприятия'}
         {showBirthdayDecor && activeTab === 'menu' && (
           <span style={{ fontSize: 28, opacity: 0.5 }}>🎂</span>
         )}
@@ -707,7 +785,7 @@ export default function AdminPage() {
 
       {/* ЭКРАН 1: ГЛАВНОЕ МЕНЮ */}
       {activeTab === 'menu' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mt-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto mt-10">
           <button
             onClick={() => setActiveTab('bloom')}
             className="bg-white/40 hover:bg-white/60 p-12 rounded-[40px] border border-[#4A3F35]/10 transition-all duration-300 flex flex-col items-center justify-center gap-6 aspect-square md:aspect-auto md:h-[300px] active:scale-[0.98]"
@@ -727,6 +805,20 @@ export default function AdminPage() {
             {orders.filter(o => o.status === 'new').length > 0 && (
               <span className="bg-red-800 text-white text-[10px] px-3 py-1 rounded-full uppercase tracking-widest absolute mt-45 md:mt-37">
                 {orders.filter(o => o.status === 'new').length} новых
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('events')}
+            className="bg-white/40 hover:bg-white/60 p-12 rounded-[40px] border border-[#4A3F35]/10 transition-all duration-300 flex flex-col items-center justify-center gap-6 aspect-square md:aspect-auto md:h-[300px] active:scale-[0.98] relative"
+            style={showBirthdayDecor ? { borderColor: 'rgba(200,145,105,0.3)', background: 'rgba(255,240,225,0.5)' } : {}}
+          >
+            <span className="text-5xl">🎨</span>
+            <span className="text-2xl font-main text-[#4A3F35] uppercase tracking-widest text-center">Мероприятия</span>
+            {totalEventRegistrations > 0 && (
+              <span className="bg-[#4A3F35] text-[#E6DBD1] text-[10px] px-3 py-1 rounded-full uppercase tracking-widest">
+                {totalEventRegistrations} записей
               </span>
             )}
           </button>
@@ -854,6 +946,91 @@ export default function AdminPage() {
                       </>
                     )}
                   </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+      )}
+
+      {/* ЭКРАН 4: МЕРОПРИЯТИЯ */}
+      {activeTab === 'events' && (
+        <div className="max-w-6xl mx-auto space-y-6">
+          {eventsLoading ? (
+            <div className="text-center py-10 text-[#4A3F35]/50">Загрузка записей...</div>
+          ) : totalEventRegistrations === 0 ? (
+            <p className="text-[#4A3F35]/60 text-center py-10 bg-white/20 rounded-2xl">
+              Записей на мероприятия пока нет.
+            </p>
+          ) : (
+            ADMIN_EVENTS.map(event => {
+              const eventRegs = getRegistrationsForEvent(event.id);
+              const dateGroups = getEventDateGroups(event.id);
+
+              return (
+                <div key={event.id} className="bg-white/50 border border-[#4A3F35]/10 rounded-[35px] p-6 md:p-8">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#4A3F35]/10 pb-6 mb-6">
+                    <div className="flex items-center gap-4">
+                      <span className="text-4xl leading-none">{event.emoji}</span>
+                      <h2 className="text-2xl md:text-3xl font-main text-[#4A3F35] uppercase tracking-wide leading-none">
+                        {event.title}
+                      </h2>
+                    </div>
+
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <span className="bg-[#4A3F35] text-[#E6DBD1] rounded-full px-4 py-2 text-xs uppercase tracking-[0.15em]">
+                        {eventRegs.length} записей всего
+                      </span>
+                    </div>
+                  </div>
+
+                  {eventRegs.length === 0 ? (
+                    <p className="text-[#4A3F35]/50 text-sm">На это мероприятие пока никто не записался.</p>
+                  ) : (
+                    <div className="space-y-6">
+                      {dateGroups.map(group => {
+                        const placesLeft = Math.max(EVENT_CAPACITY - group.registrations.length, 0);
+
+                        return (
+                          <div key={`${event.id}-${group.date || 'no-date'}`} className="bg-[#E6DBD1]/60 rounded-[25px] border border-[#4A3F35]/10 p-5">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5">
+                              <div>
+                                <p className="text-[10px] uppercase tracking-[0.2em] text-[#4A3F35]/50 mb-1">
+                                  {formatEventDate(group.date)} • {group.time || 'Время не указано'}
+                                </p>
+                                <h3 className="text-xl font-main text-[#4A3F35] uppercase tracking-wide">
+                                  {group.registrations.length} / {EVENT_CAPACITY} человек
+                                </h3>
+                              </div>
+                              <span className="text-xs text-[#4A3F35]/70 uppercase tracking-[0.15em]">
+                                Осталось мест: {placesLeft}
+                              </span>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              {group.registrations.map(reg => (
+                                <div key={reg.id} className="bg-white/45 rounded-2xl border border-[#4A3F35]/10 p-5">
+                                  <div className="flex items-start justify-between gap-3 mb-3">
+                                    <h4 className="text-lg font-bold text-[#4A3F35]">{reg.name}</h4>
+                                    <span className="text-[9px] uppercase tracking-[0.2em] text-[#4A3F35]/50 text-right">
+                                      {formatDate(reg.created_at)}
+                                    </span>
+                                  </div>
+                                  <p className="text-sm text-[#4A3F35]/75">📞 {reg.phone}</p>
+                                  {reg.email && <p className="text-sm text-[#4A3F35]/75">✉️ {reg.email}</p>}
+                                  {reg.comment && (
+                                    <p className="text-sm text-[#4A3F35]/70 mt-3 bg-[#E6DBD1]/60 rounded-xl p-3 italic">
+                                      💬 "{reg.comment}"
+                                    </p>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               );
             })

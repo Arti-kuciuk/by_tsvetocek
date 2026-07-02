@@ -4,10 +4,12 @@
       "category": "flowers",
       "title_ru": "Букет белых роз",
       "title_ro": "Buchet de trandafiri albi",
+      "title_en": "White rose bouquet",
       "price": 500,
       "image": "/flowers/roses.jpg",
       "description_ru": "Классический букет из белоснежных роз.",
       "description_ro": "Buchet clasic de trandafiri albi ca zăpada.",
+      "description_en": "A classic bouquet of snow-white roses.",
       "popular": true
     },
     {
@@ -15,10 +17,12 @@
       "category": "flowers",
       "title_ru": "Красные тюльпаны",
       "title_ro": "Lalele roșii",
+      "title_en": "Red tulips",
       "price": 350,
       "image": "/flowers/tulips.jpg",
       "description_ru": "Яркие весенние тюльпаны.",
       "description_ro": "Lalele strălucitoare de primăvară.",
+      "description_en": "Bright spring tulips.",
       "popular": true
     },
     {
@@ -26,10 +30,12 @@
       "category": "bouquets",
       "title_ru": "Авторский букет",
       "title_ro": "Buchet autor",
+      "title_en": "Artisan bouquet",
       "price": 350,
       "image": "/bouquets/mix1.jpg",
       "description_ru": "Авторский букет из различных цветов.",
       "description_ro": "Buchet autor cu diferite flori.",
+      "description_en": "An artisan bouquet of assorted flowers.",
       "popular": true
     }
   ]

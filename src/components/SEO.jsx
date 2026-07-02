@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { SITE_NAME, DEFAULT_OG_IMAGE, toAbsoluteUrl, buildPageUrl } from '../config/site';
 
-const OG_LOCALE = { ru: 'ru_RU', ro: 'ro_RO' };
+const OG_LOCALE = { ru: 'ru_RU', ro: 'ro_RO', en: 'en_US' };
 
 export default function SEO({
   title,

@@ -9,7 +9,12 @@ export default function Navbar() {
   const { t, i18n } = useTranslation();
   const { totalItems } = useCart(); 
   const [isOpen, setIsOpen] = useState(false); 
-  const [lang, setLang] = useState(() => (i18n.language === 'ro' ? 'RO' : 'RU'));
+  const [lang, setLang] = useState(() => {
+    const code = String(i18n.language || '').toLowerCase();
+    if (code.startsWith('ro')) return 'RO';
+    if (code.startsWith('en')) return 'EN';
+    return 'RU';
+  });
   const [isPop, setIsPop] = useState(false);
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -31,11 +36,14 @@ export default function Navbar() {
 
   const setLanguageCode = (code) => {
     setLang(code);
-    void i18n.changeLanguage(code === 'RU' ? 'ru' : 'ro');
+    const locale = { RU: 'ru', RO: 'ro', EN: 'en' }[code] || 'ru';
+    void i18n.changeLanguage(locale);
   };
 
   const toggleLang = () => {
-    setLanguageCode(lang === 'RU' ? 'RO' : 'RU');
+    const order = ['RU', 'RO', 'EN'];
+    const next = order[(order.indexOf(lang) + 1) % order.length];
+    setLanguageCode(next);
   };
   
   return (

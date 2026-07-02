@@ -13,7 +13,7 @@ export default function MobileMenu({ isOpen, onClose, currentLang, onLangChange 
     { name: t('nav.contactSchedule'), action: 'scrollBottom' }
   ];
 
-  const languages = ['RU', 'RO'];
+  const languages = ['RU', 'RO', 'EN'];
 
   const handleScrollBottom = () => {
     window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });

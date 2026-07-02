@@ -8,6 +8,7 @@ function normalizeCartItem(raw) {
     id: raw.id,
     title_ru: raw.title_ru ?? raw.title ?? '',
     title_ro: raw.title_ro ?? '',
+    title_en: raw.title_en ?? '',
     price: raw.price,
     image: raw.image,
     stock: raw.stock,
@@ -38,6 +39,7 @@ export const CartProvider = ({ children }) => {
       id: product.id,
       title_ru: product.title_ru ?? product.title ?? '',
       title_ro: product.title_ro ?? '',
+      title_en: product.title_en ?? '',
       price: product.price,
       image: product.image,
       stock: product.stock,
@@ -53,6 +55,7 @@ export const CartProvider = ({ children }) => {
                 ...item,
                 title_ru: itemPayload.title_ru || item.title_ru,
                 title_ro: itemPayload.title_ro || item.title_ro,
+                title_en: itemPayload.title_en || item.title_en,
                 quantity: item.quantity + qty,
               }
             : item

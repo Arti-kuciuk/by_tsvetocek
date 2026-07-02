@@ -71,7 +71,7 @@ export default function CategoryPage() {
         url={`/category/${categoryName}`}
       />
 
-      <div className="md:px-16 px-6 pt-8 md:pt-10 mb-8 md:mb-12">
+      <div className="pt-8 md:pt-10 mb-8 md:mb-12">
         <Link to="/" className="text-[#4A3F35]/70 text-[10px] md:text-sm uppercase tracking-[0.2em] hover:text-[#4A3F35] transition-colors flex items-center gap-2 w-fit border-b border-transparent hover:border-[#4A3F35]/30 pb-1">
           {t('category.back')}
         </Link>
@@ -112,6 +112,7 @@ export default function CategoryPage() {
                     id: product.id,
                     title_ru: product.title_ru,
                     title_ro: product.title_ro,
+                    title_en: product.title_en,
                     price: product.price,
                     image: product.image_url,
                     stock: product.stock_count

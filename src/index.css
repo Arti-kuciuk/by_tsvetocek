@@ -49,3 +49,9 @@
            flex items-center justify-center;
   }
 }
+
+html,
+body,
+#root {
+  overflow-x: clip;
+}

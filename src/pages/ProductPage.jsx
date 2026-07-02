@@ -61,6 +61,7 @@ export default function ProductPage() {
       id: product.id,
       title_ru: product.title_ru,
       title_ro: product.title_ro,
+      title_en: product.title_en,
       price: product.price,
       image: (product.images && product.images.length > 0) ? product.images[0] : product.image_url,
       stock: product.stock_count,

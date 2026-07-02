@@ -57,7 +57,7 @@ export default function DailyBloom() {
   };
 
   return (
-    <section className="px-6 md:px-16 pt-8 pb-12">
+    <section className="px-6 md:px-16 pt-9 pb-12">
       {/* Desktop Version */}
       <motion.div
         className="hidden md:flex bg-[#E5DACE] md:rounded-[40px] md:border-[#4A3F35]/50 md:border-[1px] p-12 flex-row md:items-stretch gap-x-10 relative overflow-hidden"

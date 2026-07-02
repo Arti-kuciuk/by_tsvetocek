@@ -1,0 +1,138 @@
+{
+  "nav": {
+    "flowers": "Flowers",
+    "bouquets": "Bouquets",
+    "gifts": "Gifts",
+    "events": "Events",
+    "contact": "Contact us",
+    "contactSchedule": "Contact / hours"
+  },
+  "common": {
+    "logoAlt": "Logo",
+    "searchAlt": "Search",
+    "cartAlt": "Cart"
+  },
+  "seo": {
+    "defaultTitle": "by tsvetocek",
+    "defaultDescription": "Artisan bouquets, gifts, and floristry workshops in Chișinău from by tsvetocek studio.",
+    "keywords": "by tsvetocek, flowers Chișinău, flower delivery, artisan bouquets, gifts, floristry"
+  },
+  "home": {
+    "title": "Home",
+    "description": "Order the freshest artisan bouquets with delivery in Chișinău from by tsvetocek studio.",
+    "topSales": "Top sellers",
+    "events": "Events",
+    "gifts": "Gifts"
+  },
+  "dailyBloom": {
+    "line1": "Aesthetics in every bloom",
+    "line2": "Freshness within",
+    "line3": "Habit",
+    "line4": "With love for",
+    "line5": "every petal",
+    "title": "Daily Bloom:",
+    "subtitle": "Aesthetics as a habit",
+    "imageAlt": "Daily Bloom",
+    "imageAltMobile": "Daily Bloom Mobile"
+  },
+  "eventsBlock": {
+    "heading": "Create beauty with us",
+    "text": "In our studio we create a space where everyone can slow down and find inspiration. We believe creativity is the best way to restore inner balance.",
+    "cta": "All events",
+    "imageAlt": "Floristry workshop"
+  },
+  "giftsBlock": {
+    "heading": "More than flowers",
+    "text": "Complete your surprise with special details. In our collection you will find artisan candles, exquisite sweets, and handmade cards that will make your gift truly unforgettable.",
+    "cta": "View gifts",
+    "imageAlt": "Gifts and souvenirs"
+  },
+  "category": {
+    "titles": {
+      "flowers": "Fresh flowers",
+      "bouquets": "Artisan bouquets",
+      "events": "Event styling",
+      "gifts": "Gifts and souvenirs"
+    },
+    "back": "← Back to home",
+    "catalogFallback": "Catalog",
+    "loading": "Loading products...",
+    "empty": "There are no products in this category yet.",
+    "seoDescription": "The «{{title}}» collection — by tsvetocek catalog."
+  },
+  "product": {
+    "loading": "Loading...",
+    "notFound": "Product not found.",
+    "backToCatalog": "← Back to catalog",
+    "inStock": "In stock: {{count}}",
+    "outOfStock": "Out of stock",
+    "descriptionFallback": "An artisan bouquet of assorted flowers.",
+    "quantity": "Quantity",
+    "addToCart": "Add to cart",
+    "noStockAlert": "Sorry, this product is out of stock."
+  },
+  "productCard": {
+    "outOfStock": "Out of stock"
+  },
+  "search": {
+    "placeholder": "Search bouquets and flowers...",
+    "loading": "Searching...",
+    "empty": "Nothing found for your search."
+  },
+  "cart": {
+    "seoTitle": "Cart",
+    "seoDescription": "Checkout at the by tsvetocek boutique.",
+    "fillRequired": "Please fill in Name, Phone, and Address.",
+    "orderSuccess": "Order placed successfully!",
+    "orderError": "An error occurred while placing your order. Please contact us directly.",
+    "confirmClear": "Clear cart?",
+    "backToShopping": "← Back to shopping",
+    "clearAll": "Clear all",
+    "empty": "Your cart is empty",
+    "checkoutTitle": "Checkout",
+    "placeholderName": "YOUR NAME",
+    "placeholderPhone": "PHONE NUMBER",
+    "labelAddress": "Delivery address",
+    "placeholderAddress": "STREET, BUILDING, APARTMENT",
+    "labelCard": "Card message",
+    "placeholderComment": "WRITE HERE...",
+    "toPay": "Total:",
+    "submitProcessing": "Processing...",
+    "submitConfirm": "Confirm order",
+    "telegramNoComment": "—",
+    "telegramBody": "🌸 **NEW ORDER** 🌸\n━━━━━━━━━━━━━━━━━━\n👤 **Customer:** {{name}}\n📞 **Phone:** {{phone}}\n📍 **Address:** {{address}}\n💬 **Comment:** {{comment}}\n━━━━━━━━━━━━━━━━━━\n🛍 **ITEMS:**\n{{items}}\n━━━━━━━━━━━━━━━━━━\n💰 **TOTAL: {{total}} MDL**"
+  },
+  "footer": {
+    "contact": "Contact us",
+    "hours": "Opening hours",
+    "weekdays": "Mon — Fri: 9:00 — 19:00",
+    "saturday": "Sat: 10:00 — 17:00",
+    "sunday": "Sun: closed",
+    "payment": "Payment methods",
+    "cash": "Cash to courier",
+    "cardSoon": "Card on website (coming soon)",
+    "p2p": "P2P transfer",
+    "social": "Social media",
+    "tagline": "With love for every petal ♥"
+  },
+  "eventsPage": {
+    "back": "← Back to home",
+    "title": "Events",
+    "seoDescription": "Art brunches and floristry workshops at by tsvetocek studio in Chișinău.",
+    "intro": "Spend your weekend surrounded by beauty. Join our weekly creative gatherings.",
+    "register": "Sign up",
+    "registerAlert": "You want to sign up for: {{title}}",
+    "artBrunch": {
+      "title": "Art brunch: Flower painting",
+      "day": "Every Saturday",
+      "time": "11:00",
+      "description": "Immerse yourself in art and floristry. Guided by an experienced artist, you will bring the beauty of live flowers onto canvas. Perfect for relaxation and weekend inspiration."
+    },
+    "masterclass": {
+      "title": "Workshop: Bouquet assembly",
+      "day": "Every Sunday",
+      "time": "11:00",
+      "description": "Feel like a true florist. We will cover composition, color theory, and teach you to create perfect bouquets with your own hands to take home."
+    }
+  }
+}
