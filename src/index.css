@@ -55,3 +55,8 @@ body,
 #root {
   overflow-x: clip;
 }
+
+::selection {
+  background: #4A3F35;
+  color: #E6DBD1;
+}
